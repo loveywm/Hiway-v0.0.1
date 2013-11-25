@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>res/USBMANAGE.png</file>
+        <file>res/SYSTEMSETTING.png</file>
+        <file>res/SYSINFOVIEW.png</file>
+        <file>res/DATAVIEW.png</file>
+        <file>res/selected-item.png</file>
+        <file>res/bg-main2.png</file>
+        <file>res/num.png</file>
+        <file>res/menu.png</file>
+        <file>res/bg.png</file>
+        <file>res/backgroup.png</file>
+        <file>res/bg-menu.png</file>
+        <file>res/title-2.png</file>
+        <file>res/bg-main1.png</file>
+        <file>res/USERMANAGE.png</file>
+        <file>res/FP.png</file>
+    </qresource>
+</RCC>

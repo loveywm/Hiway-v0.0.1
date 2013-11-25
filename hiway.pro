@@ -13,13 +13,36 @@ TEMPLATE =
 
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    gui/cmainframe.cpp \
+    gui/customstyle.cpp \
+    gui/menu.cpp \
+    gui/uiFont.cpp \
+    gui/uiglobal.cpp \
+    gobal.cpp \
+    gui/cmainwindow.cpp \
+    hiwaylib.cpp
 
 
 
-HEADERS  +=
+HEADERS  += \
+    gui/cmainframe.h \
+    gui/Define.h \
+    gui/customstyle.h \
+    gui/menu.h \
+    gui/uiFont.h \
+    gui/uiglobal.h \
+    gui/cmainwindow.h \
+    hiwaylib.h \
+    global.h \
+    include/rtc.h
 
 
-FORMS    +=
+FORMS    += \
+    gui/cmainframe.ui \
+    gui/cmainwindow.ui
 
-RESOURCES +=
+RESOURCES += \
+    hiway.qrc
+
+TRANSLATIONS = hiway.ts
