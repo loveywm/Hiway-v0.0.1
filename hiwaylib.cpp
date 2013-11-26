@@ -116,6 +116,87 @@ void uiGetTs(void)
 
 }
 /////////////////////////////////////////////////////////////
+//KeyBoard
+struct input_event KB_DATA;
+static int g_dwReadKeyTime = 0;
+
+BOOL GetKey(void/*BOOL blong*/)
+{
+    BOOL KeyCode =  UIKEY_NONE;
+    if(g_hKeyBoard == INVALID_HANDLE_VALUE)
+    {
+        qDebug() << "g_hKeyBoard == INVALID_HANDLE_VALUE";
+        return UIKEY_NONE;
+    }
+
+    if(GetMainTickCount() - g_dwReadKeyTime > 100)
+    {
+        g_dwReadKeyTime = GetMainTickCount();
+        read(g_hKeyBoard,&KB_DATA,sizeof(struct input_event));//阻塞的读取
+        if(KB_DATA .type == 1)
+        {
+            qDebug() << "xxxxxxxxxxxxxxxxxxxx";
+            if(KB_DATA.code == UIKEY_OK)//13
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_OK;
+                    return KeyCode;
+                }
+            }
+            if(KB_DATA.code == UIKEY_MENU)//19
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_MENU;
+                    return KeyCode;
+                }
+            }
+            if(KB_DATA.code == UIKEY_UP)//14
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_UP;
+                    return KeyCode;
+                }
+            }
+            if(KB_DATA.code == UIKEY_DOWN)//15
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_DOWN;
+                    return KeyCode;
+                }
+            }
+            if(KB_DATA.code == UIKEY_1)//left
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_1;
+                    return KeyCode;
+                }
+            }
+            if(KB_DATA.code == UIKEY_2)//15
+            {
+                if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)
+                {
+                    KeyCode = UIKEY_2;
+                    return KeyCode;
+                }
+            }
+        }
+        else
+        {
+            //continue;
+        }
+    }
+    return KeyCode;
+}
+
+
+
+
+/////////////////////////////////////////////////////////////
 //rtc
 //获取rtc的值，存入传入指针中
 void Rtc_Get_time(int* pnYear, int* pnMonth, int* pnDay, int* pnWeekday, \
@@ -221,6 +302,17 @@ static BOOL InitRtcClock(void)
     qDebug() << "InitRtcClock ok";
     return TRUE;
 }
+static BOOL InitKeyBoard(void)
+{
+    g_hKeyBoard = open(DEVNAME_KEYBOARD,O_RDWR);
+    if(g_hKeyBoard == -1)
+    {
+        qDebug() << "InitKeyBoard error";
+        return FALSE;
+    }
+    qDebug() << "InitKeyBoard ok";
+    return TRUE;
+}
 
 
 
@@ -234,6 +326,7 @@ int HIWAY_INIT0(void)
 
         DEVINIT_WRAPPER(InitTouchScreen(), DEVERR_TS);
         //DEVINIT_WRAPPER(InitRtcClock(), DEVERR_RTC);
+        DEVINIT_WRAPPER(InitKeyBoard(), DEVERR_KEYBOARD);
 
         return DEVERR_SUCCESS;
 

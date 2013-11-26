@@ -52,10 +52,11 @@ typedef unsigned long long		  UINT64;
 
 #define GUI_DLG_SET_THEME()		\
 { \
-        ui->lblBackground->setPixmap(QPixmap(BACKGROUND_IMAGE)); \
-        ui->lblTitleBackground->setPixmap(QPixmap(TITLE_IMAGE)); \
-       SET_DLG_ITEM_COLOR(this,1); \
+    ui->lblBackground->setPixmap(QPixmap(BACKGROUND_IMAGE)); \
+    ui->lblTitleBackground->setPixmap(QPixmap(TITLE_IMAGE)); \
+    SET_DLG_ITEM_COLOR(this,1); \
 }
+       //ui->lblTitleBackground->setPixmap(QPixmap(TITLE_IMAGE)); \
 
 
 ////////////////////////////

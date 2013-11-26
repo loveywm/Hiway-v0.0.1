@@ -73,6 +73,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     GUI_DLG_IMPL(TRUE);
+    //QApplication::processEvents();
 
     //ui->lblMenu.
     qDebug() << "CMainWindow init!";
@@ -96,7 +97,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 
     g_MainWindow = this;
-    //this->CMainWindow
+
     QTimer::singleShot(50,this,SLOT(OnTimer()));
 
 

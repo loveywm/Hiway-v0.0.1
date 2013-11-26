@@ -137,11 +137,14 @@ typedef unsigned long			LPARAM;
 #define G2U(s) ( QTextCodec::codecForName("GBK")->toUnicode(s) )
 #define U2G(s) ( QTextCodec::codecForName("GBK")->fromUnicode(s) )
 
+/////////////////////////////////////////////////////////////
+extern int GetMainTickCount(void);
 
 //////////////////////////////////////////////////////////////////////////
 //Device Handles
 extern HFILE   g_hTs;
 extern HFILE   g_hRtc;
+extern HFILE   g_hKeyBoard;
 
 extern BOOL            g_uiBuildMenu;
 ////////////////////////////////////////

@@ -141,13 +141,14 @@ CMenu::CMenu(QWidget *parent /* = NULL */)
     m_bTerminateFlag = FALSE;
     g_uiTimeLastAction = GetMainTickCount();
     uiProcBuildMenu();
+    //this->MenuProc(UISTR_MENU_MAINMENU);
 
 }
 //进入标题主界面程序会第一执行下面函数
 void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
 {
     int nkey;
-    qDebug() << "nkey=="<<nkey;
+    //qDebug() << "nkey=="<<nkey;
     _lstart:
     if(nPopupMenuTitle == -1)//默认值
     {
@@ -157,18 +158,40 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
     g_uiMenuItemTitle = nPopupMenuTitle;//设置title位置
     g_uiMenuItemIndex = uiProcMenuTitleIndex(nPopupMenuTitle) + 1;//取title下面第一个Index
     g_uiMenuTopIndex = g_uiMenuItemIndex;//设置title下面第一个为top索引
-    qDebug() << "nPopupMenuTitle=="<<nPopupMenuTitle;
-    qDebug() << "g_uiMenuItemTitle=="<<g_uiMenuItemTitle;
-    qDebug() << "uiProcMenuTitleIndex(nPopupMenuTitle)+1=="<<uiProcMenuTitleIndex(nPopupMenuTitle);
-    qDebug() << "g_uiMenuItemIndex=="<<g_uiMenuItemIndex;
-    qDebug() << "g_uiMenuTopIndex=="<<g_uiMenuTopIndex;
+    //qDebug() << "nPopupMenuTitle=="<<nPopupMenuTitle;
+    //qDebug() << "g_uiMenuItemTitle=="<<g_uiMenuItemTitle;
+    //qDebug() << "uiProcMenuTitleIndex(nPopupMenuTitle)+1=="<<uiProcMenuTitleIndex(nPopupMenuTitle);
+    //qDebug() << "g_uiMenuItemIndex=="<<g_uiMenuItemIndex;
+    //qDebug() << "g_uiMenuTopIndex=="<<g_uiMenuTopIndex;
 
     OnRedraw();
 
-    while (!m_bTerminateFlag && uiTimeIsTimeout(5000) == FALSE)
+    while (!m_bTerminateFlag && uiTimeIsTimeout(1000) == FALSE)
     {
 
         QApplication::processEvents();
+      /*  BOOL keycode = 0;
+        keycode = GetKey();
+        switch(keycode)
+        {
+            case 13:
+                qDebug() << "keycode==ok"<<13;
+                break;
+            case 19:
+                qDebug() << "keycode==menu"<<19;
+                break;
+            case 14:
+                qDebug() << "keycode==up"<<14;
+                break;
+            case 15:
+                qDebug() << "keycode==down"<<15;
+                break;
+            default:
+                break;
+
+        }*/
+
+
         //qDebug() << "m_bTerminateFlag=="<<m_bTerminateFlag;
         //g_uiBuildMenu = 1;
         if(g_uiBuildMenu && nPopupMenuTitle == UISTR_MENU_MAINMENU)
@@ -181,7 +204,8 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
     }
 
     MenuSettingEnd(nPopupMenuTitle);
-    //GUI_DLG_SET_THEME();
+    GUI_DLG_SET_THEME();
+    //update();
 
 
 }
@@ -228,23 +252,23 @@ void CMenu::paintEvent(QPaintEvent *e)
     QPixmap pmap = m_pmapFrame;
     QPainter painter(&pmap);
 
-    qDebug() << "paintEvent";
+    //qDebug() << "paintEvent";
 
     int title, from, to;
     title = uiProcMenuTitleIndex(g_uiMenuItemTitle);
 
-    qDebug() << "title=="<<title;
-    qDebug() << "from=="<<from;
-    qDebug() << "to=="<<to;
+    //qDebug() << "title=="<<title;
+    //qDebug() << "from=="<<from;
+    //qDebug() << "to=="<<to;
 
     if (uiProcMenuGetCurrentRange(&from, &to))
     {
-            qDebug() << "from1=="<<from;
-            qDebug() << "to1=="<<to;
+            //qDebug() << "from1=="<<from;
+            //qDebug() << "to1=="<<to;
             switch ((int)(g_uiMenuItems[title].szIconFile))
             {
                 case UIMENU_ICON:
-                    qDebug() << "UIMENU_ICON";
+                    //qDebug() << "UIMENU_ICON";
                     drawIconStyle(&painter, g_uiMenuItemIndex, from, to);
                     break;
                 case UIMENU_REPORT:
@@ -307,8 +331,8 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
                 y += h + h_spacer;
             }
 
-            qDebug() << "i==" << i;
-            qDebug() << "nCurrentIndex==" << nCurrentIndex;
+            //qDebug() << "i==" << i;
+            //qDebug() << "nCurrentIndex==" << nCurrentIndex;
 
             item = &g_uiMenuItems[i];
             //qDebug() << "nMenuStr==" << g_uiMenuItems[i].nMenuStr;
@@ -322,14 +346,14 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
                 painter->setClipPath(roundPath);
                 painter->drawPixmap(x, y, w, h, pmap_sel, 0, 0, pmap_sel.width(), pmap_sel.height());
                 painter->setClipPath(roundPath, Qt::NoClip);
-                qDebug() << "love1";
+                //qDebug() << "love1";
             }
             else
             {
                 painter->setPen(QPen(QColor(74,74,74),1,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
                 painter->setBrush(QColor(20,20,20));
                 painter->drawRoundRect(x, y, w, h, 20, 15);
-                qDebug() << "love2";
+                //qDebug() << "love2";
             }
 
             QIcon ico(QString(RESOURCE_PATH) + QString(item->szIconFile));

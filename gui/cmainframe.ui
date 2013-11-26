@@ -25,6 +25,9 @@
    <property name="text">
     <string/>
    </property>
+   <property name="pixmap">
+    <pixmap resource="../hiway.qrc">:/images/res/bg-main2.png</pixmap>
+   </property>
   </widget>
   <widget class="QLabel" name="lblBackgroundFrame">
    <property name="geometry">
@@ -39,7 +42,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="../hiway.qrc">:/images/res/bg-menu.png</pixmap>
+    <pixmap resource="../hiway.qrc">:/images/res/bg-main2.png</pixmap>
    </property>
   </widget>
   <widget class="QLabel" name="lblStatusIcon">
@@ -72,7 +75,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>6</y>
+     <y>0</y>
      <width>320</width>
      <height>30</height>
     </rect>
@@ -88,7 +91,7 @@
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>10</y>
+     <y>0</y>
      <width>26</width>
      <height>26</height>
     </rect>
@@ -101,7 +104,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>8</y>
+     <y>0</y>
      <width>273</width>
      <height>28</height>
     </rect>
@@ -114,7 +117,7 @@
    <property name="geometry">
     <rect>
      <x>201</x>
-     <y>10</y>
+     <y>0</y>
      <width>110</width>
      <height>28</height>
     </rect>
@@ -127,10 +130,10 @@
   <zorder>lblBackgroundFrame</zorder>
   <zorder>lblStatusIcon</zorder>
   <zorder>lblStatusText</zorder>
-  <zorder>lblTitleBackground</zorder>
-  <zorder>lblTitleText</zorder>
   <zorder>lblTitleText1</zorder>
   <zorder>lblTitleIcon</zorder>
+  <zorder>lblTitleBackground</zorder>
+  <zorder>lblTitleText</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
