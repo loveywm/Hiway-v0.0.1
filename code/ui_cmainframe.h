@@ -1,9 +1,10 @@
 /********************************************************************************
-** Form generated from reading UI file 'cmainframe.ui'
+** Form generated from reading ui file 'cmainframe.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.4
+** Created: Fri Nov 29 10:35:45 2013
+**      by: Qt User Interface Compiler version 4.5.0
 **
-** WARNING! All changes made in this file will be lost when recompiling UI file!
+** WARNING! All changes made in this file will be lost when recompiling ui file!
 ********************************************************************************/
 
 #ifndef UI_CMAINFRAME_H
@@ -39,10 +40,11 @@ public:
         lblBackground = new QLabel(CMainFrame);
         lblBackground->setObjectName(QString::fromUtf8("lblBackground"));
         lblBackground->setGeometry(QRect(0, 0, 320, 240));
+        lblBackground->setPixmap(QPixmap(QString::fromUtf8(":/images/res/bg-main2.png")));
         lblBackgroundFrame = new QLabel(CMainFrame);
         lblBackgroundFrame->setObjectName(QString::fromUtf8("lblBackgroundFrame"));
         lblBackgroundFrame->setGeometry(QRect(12, 10, 297, 217));
-        lblBackgroundFrame->setPixmap(QPixmap(QString::fromUtf8(":/images/res/bg-menu.png")));
+        lblBackgroundFrame->setPixmap(QPixmap(QString::fromUtf8(":/images/res/bg-main2.png")));
         lblStatusIcon = new QLabel(CMainFrame);
         lblStatusIcon->setObjectName(QString::fromUtf8("lblStatusIcon"));
         lblStatusIcon->setGeometry(QRect(20, 215, 16, 16));
@@ -51,25 +53,25 @@ public:
         lblStatusText->setGeometry(QRect(40, 210, 275, 25));
         lblTitleBackground = new QLabel(CMainFrame);
         lblTitleBackground->setObjectName(QString::fromUtf8("lblTitleBackground"));
-        lblTitleBackground->setGeometry(QRect(0, 6, 320, 30));
+        lblTitleBackground->setGeometry(QRect(0, 0, 320, 30));
         lblTitleBackground->setPixmap(QPixmap(QString::fromUtf8(":/images/res/title-2.png")));
         lblTitleIcon = new QLabel(CMainFrame);
         lblTitleIcon->setObjectName(QString::fromUtf8("lblTitleIcon"));
-        lblTitleIcon->setGeometry(QRect(9, 10, 26, 26));
+        lblTitleIcon->setGeometry(QRect(9, 0, 26, 26));
         lblTitleText = new QLabel(CMainFrame);
         lblTitleText->setObjectName(QString::fromUtf8("lblTitleText"));
-        lblTitleText->setGeometry(QRect(40, 8, 273, 28));
+        lblTitleText->setGeometry(QRect(40, 0, 273, 28));
         lblTitleText1 = new QLabel(CMainFrame);
         lblTitleText1->setObjectName(QString::fromUtf8("lblTitleText1"));
-        lblTitleText1->setGeometry(QRect(201, 10, 110, 28));
+        lblTitleText1->setGeometry(QRect(201, 0, 110, 28));
         lblBackground->raise();
         lblBackgroundFrame->raise();
         lblStatusIcon->raise();
         lblStatusText->raise();
-        lblTitleBackground->raise();
-        lblTitleText->raise();
         lblTitleText1->raise();
         lblTitleIcon->raise();
+        lblTitleBackground->raise();
+        lblTitleText->raise();
 
         retranslateUi(CMainFrame);
 
@@ -87,6 +89,7 @@ public:
         lblTitleIcon->setText(QString());
         lblTitleText->setText(QString());
         lblTitleText1->setText(QString());
+        Q_UNUSED(CMainFrame);
     } // retranslateUi
 
 };

@@ -2,7 +2,9 @@
 #define CMAINWINDOW_H
 
 #include <QWidget>
+
 #include "Define.h"
+#include "ui_cmainwindow.h"
 
 namespace Ui {
     class CMainWindow;

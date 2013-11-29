@@ -7,11 +7,42 @@
 #include "../global.h"
 #include "ui_cmainframe.h"
 
+QRect g_uiMenuCurrentArea;
 #define SELECTED_ITEM_FILENAME "selected-item.png"
 #define RESOURCE_PATH	":/images/res/"
 #define MENUITEM_ICONSTYLE_SIZE         68
-#define MENUITEM_COLS       3
+#define MENUITEM_COLS                   3
 #define MENU_ICON_TOPMARGIN		10
+#define MENUITEM_ROWS                   5
+
+#define SCROLL_BG_FILENAME		"scroll-bg.png"
+#define SCROLL_ITEM_FILENAME            "scroll-item.png"
+
+#define MENU_PEN_COLOR			QColor(255,255,214)//FOREGROUND_COLOR
+#define MENU_ITEM_SELET_COLOR           QColor(255,255,0)
+
+#define MENU_ICON_TOPMARGIN		10
+#define MENU_REPORT_LEFTMARGIN          5
+#define MENU_ICON_DRAW_NUMBER           TRUE
+
+static int __MENU_ICON_COL_CNT = 3;
+static int __MENU_ICON_ITEM_SIZE = 68;
+
+static const char * const __RIGHT_ARROW[] =
+{
+        "4 7 2 1",
+        "   c None",
+        "*  c #064CA4",
+        "*   ",
+        "**  ",
+        "*** ",
+        "****",
+        "*** ",
+        "**  ",
+        "*   "
+};
+
+
 
 typedef enum//菜单的几种类型枚举
 {
@@ -44,16 +75,33 @@ typedef struct//标题数据结构
 //日后添加标题都在这两添加
 T_UI_MENUITEM g_uiMenuItemsSrc[] =
 {
-    {UISTR_MENU_MAINMENU, UIMENU_TITLE, (const char*)UIMENU_ICON, -1},
-    //{UISTR_MENU_USERMANAGE, UIMENU_POPUP, "FP.png", -1},
-    {UISTR_MENU_USERMANAGE, UIMENU_POPUP, "USERMANAGE.png", -1},
-    {UISTR_MENU_DATAVIEW, UIMENU_POPUP, "DATAVIEW.png", -1},
-    {UISTR_MENU_USBMANAGE, UIMENU_POPUP, "USBMANAGE.png", -1},
-    {UISTR_MENU_SYSTEMSETTING, UIMENU_POPUP, "SYSTEMSETTING.png", -1},
-    {UISTR_MENU_SYSINFOVIEW, UIMENU_POPUP, "SYSINFOVIEW.png", -1},
+    {UISTR_MENU_MAINMENU,       UIMENU_TITLE,       (const char*)UIMENU_ICON,   -1},
+    //{UISTR_MENU_USERMANAGE,   UIMENU_POPUP,       "FP.png",                   -1},
+    {UISTR_MENU_USERMANAGE,     UIMENU_POPUP,       "USERMANAGE.png",           -1},
+    {UISTR_MENU_DATAVIEW,       UIMENU_POPUP,       "DATAVIEW.png",             -1},
+    {UISTR_MENU_USBMANAGE,      UIMENU_POPUP,       "USBMANAGE.png",            -1},
+    {UISTR_MENU_SYSTEMSETTING,  UIMENU_POPUP,       "SYSTEMSETTING.png",        -1},
+    {UISTR_MENU_SYSINFOVIEW,    UIMENU_POPUP,       "SYSINFOVIEW.png",          -1},
+
+    {UISTR_MENU_USERMANAGE,     UIMENU_TITLE,       (const char*)UIMENU_ICON,   -1},
+    {UISTR_MENU_ENROLLNEW,      UIMENU_CUSTOM,      "ENROLLNEW.png",            -1},
+    {UISTR_MENU_ENROLLEDIT,     UIMENU_CUSTOM,      "ENROLLEDIT.png",           -1},
+    {UISTR_MENU_ENROLLDEL,      UIMENU_CUSTOM,      "ENROLLDEL.png",            -1},
 
 
-    {-1, UIMENU_TITLE, NULL, -1}
+    {UISTR_MENU_SYSINFOVIEW,    UIMENU_TITLE,       (const char*)UIMENU_REPORT, -1},
+    {UISTR_MENU_USERENROLLCOUNT,UIMENU_HASVALUE,    "USED_USERS.png",           -1},
+    {UISTR_MENU_FPENROLLCOUNT,  UIMENU_HASVALUE,    "USED_FP.png",              -1},
+    //{UISTR_MENU_PWDENROLLCOUNT, UIMENU_HASVALUE,    "USED_PWD.png",             -1},
+    //{UISTR_MENU_CARDENROLLCOUNT,UIMENU_HASVALUE,    "USED_CARD.png",            -1},
+    //{UISTR_MENU_GLOGCOUNT,      UIMENU_HASVALUE,    "USED_GLOG.png",            -1},
+    //{UISTR_MENU_MLOGCOUNT,      UIMENU_HASVALUE,    "USED_MLOG.png",            -1},
+    //{UISTR_MENU_USEDMEMORY,     UIMENU_HASVALUE,    "USED_MEMORY.png",          -1},
+    //{UISTR_MENU_FREESPACES,   UIMENU_POPUP,       "FREESPACES.png",           -1},
+    {UISTR_MENU_DEVICEINFO,     UIMENU_POPUP,       "DEVICEINFO.png",           -1},
+
+
+    {-1,                        UIMENU_TITLE,       NULL,                       -1}
 };
 
 //声明存放标题数组
@@ -62,6 +110,7 @@ T_UI_MENUITEM g_uiMenuItems[ITEM_CNT(g_uiMenuItemsSrc)];
 int g_uiMenuItemTitle = UISTR_MENU_MAINMENU;
 int g_uiMenuItemIndex = 1;//标题项目索引
 int g_uiMenuTopIndex = 1;//标题项目顶端位置标志
+int g_uiPopupTitle = -1;//
 
 extern DWORD	g_uiTimeLastAction;//记录前一次操作的时间
 
@@ -124,6 +173,52 @@ int uiProcMenuTitleIndex(int nItemStr)
     }
     return -1;
 }
+//获取title下面子菜单的数目
+int uiProcMenuGetItemCount(int nTitle)
+{
+    int nIndex = uiProcMenuTitleIndex(nTitle);
+    if (nIndex >= (int)ITEM_CNT(g_uiMenuItems))
+        return 0;
+    if (g_uiMenuItems[nIndex++].nType != UIMENU_TITLE)//从0开始，需要提前+1
+        return 0;
+
+    int nCount= 0;
+    while (g_uiMenuItems[nIndex].nType != UIMENU_TITLE)
+    {
+        nCount++;
+        nIndex++;
+    }
+
+    return nCount;
+}
+//获取Item下面子菜单的对应显示值
+QString uiProcMenuGetItemValue(int nItemStr)
+{
+    DWORD dwValue = 0;
+    QString str;
+    int a, b, c, d;
+    char strTemp[16];
+
+    switch (nItemStr)
+    {
+        case UISTR_MENU_USERENROLLCOUNT:
+            str = QString("%1 / %3%4").arg(1000).arg(5000).arg("ywm");
+            break;
+        case UISTR_MENU_FPENROLLCOUNT:
+            str = QString("%1 / %3%4").arg(200).arg(5000).arg("xxx");
+            break;
+        default:
+            break;
+    }
+
+    if (!str.length())
+        str = QString("%1").arg(dwValue);
+
+    return str;
+}
+
+
+
 //menu的初始化设置
 void MenuSettingStart(BOOL bFirst = FALSE)
 {
@@ -147,9 +242,9 @@ CMenu::CMenu(QWidget *parent /* = NULL */)
 //进入标题主界面程序会第一执行下面函数
 void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
 {
-    int nkey;
+    int nKey;
     //qDebug() << "nkey=="<<nkey;
-    _lstart:
+ _lstart:
     if(nPopupMenuTitle == -1)//默认值
     {
         MenuSettingStart(TRUE);
@@ -166,34 +261,13 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
 
     OnRedraw();
 
-    while (!m_bTerminateFlag && uiTimeIsTimeout(1000) == FALSE)
+    while (!m_bTerminateFlag && uiTimeIsTimeout(60000) == FALSE)
     {
 
-        QApplication::processEvents();
-      /*  BOOL keycode = 0;
-        keycode = GetKey();
-        switch(keycode)
-        {
-            case 13:
-                qDebug() << "keycode==ok"<<13;
-                break;
-            case 19:
-                qDebug() << "keycode==menu"<<19;
-                break;
-            case 14:
-                qDebug() << "keycode==up"<<14;
-                break;
-            case 15:
-                qDebug() << "keycode==down"<<15;
-                break;
-            default:
-                break;
-
-        }*/
+        //QApplication::processEvents();
+        POST_EVENTS();
 
 
-        //qDebug() << "m_bTerminateFlag=="<<m_bTerminateFlag;
-        //g_uiBuildMenu = 1;
         if(g_uiBuildMenu && nPopupMenuTitle == UISTR_MENU_MAINMENU)
         {
             g_uiBuildMenu = FALSE;
@@ -201,13 +275,50 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
             uiProcBuildMenu();
             goto _lstart;
         }
+
+        nKey = GetKey();
+        switch(nKey)
+        {
+        case UIKEY_OK://13
+            qDebug() << "keycode==ok"<<13;
+            OnKeyPressOk(nPopupMenuTitle);
+            //this->hide();
+            break;
+        case 19:
+            qDebug() << "keycode==menu"<<19;
+            //this->show();
+            break;
+        case UIKEY_UP://14
+            qDebug() << "keycode==up"<<14;
+            OnKeyPressArrow(nKey,nPopupMenuTitle);
+            break;
+        case UIKEY_DOWN://15
+            qDebug() << "keycode==down"<<15;
+            OnKeyPressArrow(nKey,nPopupMenuTitle);
+            break;
+        case UIKEY_1://UIKEY_ESC
+            qDebug() << "keycode==esc"<<1;
+            goto _ExitWithoutSave;
+            break;
+        case 2:
+            qDebug() << "keycode==right"<<2;
+            break;
+        default:
+            break;
+        }
+    }
+    if(uiTimeIsTimeout(60000))
+    {
+        goto _ExitWithoutSave;
     }
 
     MenuSettingEnd(nPopupMenuTitle);
     GUI_DLG_SET_THEME();
     //update();
 
+_ExitWithoutSave:
 
+    return;
 }
 
 void CMenu::OnRedraw()
@@ -272,12 +383,12 @@ void CMenu::paintEvent(QPaintEvent *e)
                     drawIconStyle(&painter, g_uiMenuItemIndex, from, to);
                     break;
                 case UIMENU_REPORT:
-                    qDebug() << "UIMENU_REPORT";
-                    //drawReportStyle(&painter, g_uiMenuItemIndex, from, to, TRUE);
+                    //qDebug() << "UIMENU_REPORT";
+                    drawReportStyle(&painter, g_uiMenuItemIndex, from, to, TRUE);
                     break;
                 case UIMENU_REPORT_NOICON:
                     qDebug() << "UIMENU_REPORT_NOICON";
-                    //drawReportStyle(&painter, g_uiMenuItemIndex, from, to, FALSE);
+                    drawReportStyle(&painter, g_uiMenuItemIndex, from, to, FALSE);
                     break;
                 case UIMENU_CUSTOMDRAW:
                 {
@@ -295,6 +406,7 @@ void CMenu::paintEvent(QPaintEvent *e)
     //this->lblBackgroundFrame->setPixmap(pmap);
 }
 
+//绘制szIconFile类型为UIMENU_ICON的标题
 void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to)
 {
         painter->save();
@@ -374,6 +486,265 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
         painter->restore();
         //while(1){sleep(5);}
 }
+
+//绘制szIconFile类型为UIMENU_REPORT,UIMENU_REPORT_NOICON,的标题
+void CMenu::drawReportStyle(QPainter *painter, int nCurrentIndex, int from, int to, bool bDrawIcon)
+{
+    painter->save();
+
+    int i;
+    int nBottomIndex;
+    int x, y, w, h, w_spacer;
+    T_UI_MENUITEM *item;
+
+    w_spacer = 5;
+    x = w_spacer; y = m_nFrameY + 10;
+    w = m_nFrameWidth - 15; h = (m_nFrameHeight - 10) / MENUITEM_ROWS;
+
+    nBottomIndex = MIN(g_uiMenuTopIndex + MENUITEM_ROWS - 1, to);
+    //qDebug() << "drawReportStyle::nBottomIndex==" << nBottomIndex;
+
+    for (i = g_uiMenuTopIndex; i <= nBottomIndex; i++)
+    {
+            x = w_spacer;
+
+            item = &g_uiMenuItems[i];
+
+            if (nCurrentIndex == i)
+            {
+                    QPixmap pmap_sel(QString(RESOURCE_PATH) + QString(SELECTED_ITEM_FILENAME));
+                    QPainterPath roundPath = CustomStyle::roundRectPath(QRect(x, y, w, h));
+                    painter->setClipPath(roundPath);
+                    painter->drawPixmap(x, y, w, h, pmap_sel, 0, 0, pmap_sel.width(), pmap_sel.height());
+                    painter->setClipPath(roundPath, Qt::NoClip);
+                    g_uiMenuCurrentArea = QRect(x, y, w, h);
+            }
+
+            if (bDrawIcon)
+            {
+                    QPixmap pmap(QString(RESOURCE_PATH) + QString(item->szIconFile));
+                    painter->drawPixmap(x + ((30 - pmap.width()) >> 1), y + ((h - pmap.height()) >> 1), pmap);
+                    x += 30;
+            }
+            if(nCurrentIndex == i)
+            {
+                    painter->setFont(SB_FONT_12());
+                    uiLcdDrawText(painter, x + MENU_REPORT_LEFTMARGIN, y, w-x, h, Qt::AlignTop | Qt::AlignLeft, UISTR(item->nMenuStr), MENU_ITEM_SELET_COLOR);
+                    if(item->nType == UIMENU_HASVALUE)
+                        uiLcdDrawText(painter, x, y, w-x, h, Qt::AlignBottom | Qt::AlignRight, uiProcMenuGetItemValue(item->nMenuStr), MENU_ITEM_SELET_COLOR);
+                    painter->setFont(SB_FONT_13());
+            }
+            else
+            {
+                    uiLcdDrawText(painter, x + MENU_REPORT_LEFTMARGIN, y, w-x, h, Qt::AlignTop | Qt::AlignLeft, UISTR(item->nMenuStr), MENU_PEN_COLOR);
+                    if(item->nType == UIMENU_HASVALUE)
+                        uiLcdDrawText(painter, x, y, w-x, h, Qt::AlignBottom | Qt::AlignRight, uiProcMenuGetItemValue(item->nMenuStr), MENU_PEN_COLOR);
+            }
+
+            if (item->nType == UIMENU_POPUP || item->nType == UIMENU_CUSTOM_HASCHILD)
+            {
+                    QImage pmap_more(__RIGHT_ARROW);
+                    if(nCurrentIndex == i)
+                            pmap_more.setColor(1,qRgb(255,255,0));
+                    else
+                            pmap_more.setColor(1,qRgb(255,255,255));
+                    painter->drawImage(w-pmap_more.width(), y+(h-pmap_more.height())/2, pmap_more);
+            }
+            y += h;
+    }
+    if (TRUE)
+    {
+            QPixmap pmap_scrollBg(QString(RESOURCE_PATH) + QString(SCROLL_BG_FILENAME));
+            QPixmap pmap_scrollItem(QString(RESOURCE_PATH) + QString(SCROLL_ITEM_FILENAME));
+
+            h = (m_nFrameHeight - 10) / (to - from + 1);
+
+            painter->drawPixmap(m_nFrameWidth - 7, m_nFrameY + 10, 6, m_nFrameHeight - 10,
+                                                    pmap_scrollBg, 0, 0, 6, pmap_scrollBg.height());
+            painter->drawPixmap(m_nFrameWidth - 7, m_nFrameY + 10  + h*(nCurrentIndex - from), 6, h,
+                                                    pmap_scrollItem, 0, 0, 6, pmap_scrollItem.height());
+    }
+    painter->restore();
+}
+
+//按键按下操作，传入ntitle参数
+void CMenu::OnKeyPressOk(int nTitle)
+{
+    int nCurrentTitle, nCurrentIndex, nTopIndex;
+    int __prev_col_cnt, __prev_item_size;
+
+    nCurrentTitle = g_uiMenuItemTitle;
+    nCurrentIndex = g_uiMenuItemIndex;
+    nTopIndex = g_uiMenuTopIndex;
+    qDebug() << "OnKeyPressOk::nCurrentTitle=="<<nCurrentTitle;
+    qDebug() << "OnKeyPressOk::nCurrentIndex=="<<nCurrentIndex;
+    qDebug() << "OnKeyPressOk::nTopIndex=="<<nTopIndex;
+/*
+    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_USBMANAGE) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_SYSTEMSETTING))
+    {
+            if (g_uiProcStatus.byMgr != PRIV_SMGR && Db_GetManagerCount(PRIV_SMGR))
+            {
+                    uiLcdMessageBox(UI_MSG_ERROR, UISTR_VERIFY_ILLEGAL, UI_MSGTIMEOUT);
+                    return;
+            }
+    }
+
+    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_BAUDRATE))
+    {
+            if (!dbSetupSystemNew.bRS232Use && !dbSetupSystemNew.bRS485Use)
+                    return;
+    }
+
+    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_IPADDRESS) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_MASKADDRESS) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_GWADDRESS) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_COMMPWD) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_DHCPUSE) ||
+    (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_PORTBACKGROUND) ||
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_PCBACKGROUND))
+    {
+            if (!dbSetupSystemNew.bEthernetUse)
+                    return;
+    }
+
+    if ((dbSetupSystemNew.nLockGroupMain) &&
+            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_LOCKGROUP_SET))
+            return;
+*/
+    switch (g_uiMenuItems[nCurrentIndex].nType)
+    {
+    case UIMENU_POPUP:
+            __prev_col_cnt = __MENU_ICON_COL_CNT;
+            __prev_item_size = __MENU_ICON_ITEM_SIZE;
+
+            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_SYSTEMSETTING)
+            {
+                __MENU_ICON_COL_CNT = 3;
+                __MENU_ICON_ITEM_SIZE = 68;
+            }
+/*            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ENROLLNEW)
+            {
+                    BOOL bResult;
+                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
+                    bzero(&gUserInfoTemp, sizeof(USER_INFO));
+                    DbUserInfoFlagManagerSet(&gUserInfoTemp, PRIV_USER);
+                    bResult = (BOOL)DIALOGBOXEX(CInputUserIDName, CInputUserIDName::ID_ALL);
+                    goto _lPopupExit;
+            }
+            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ENROLLDELETE)
+            {
+                    if (!Db_GetUserCount())
+                    {
+                            uiLcdMessageBox(UI_MSG_ERROR, UISTR_ENROLLDELETE_NODATA, UI_MSGTIMEOUT);
+                            break;
+                    }
+                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
+                    bzero(&gUserInfoTemp, sizeof(USER_INFO));
+                    gUserInfoTemp.ID = DIALOGBOX_RET(CInputUserID);
+                    goto _lPopupExit;
+            }
+            if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_USERTIMEZONE) ||
+                    (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_DURESS_MANAGE))
+            {
+                    if (!Db_GetUserCount())
+                    {
+                            uiLcdMessageBox(UI_MSG_ERROR, UISTR_ENROLLDELETE_NODATA, UI_MSGTIMEOUT);
+                            break;
+                    }
+                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
+                    g_uiMenuIDForUerTZ = (UINT64)DIALOGBOX_RET(CInputUserID);
+                    goto _lPopupExit;
+            }
+            uiSoundOut(SOUND_MENUSELECT, UI_BUZZER_NONE);
+*/
+            MenuProc(g_uiMenuItems[nCurrentIndex].nMenuStr);
+
+_lPopupExit:
+            g_uiMenuItemTitle = nCurrentTitle;
+            g_uiMenuItemIndex = nCurrentIndex;
+            g_uiMenuTopIndex = nTopIndex;
+            __MENU_ICON_COL_CNT = __prev_col_cnt;
+            __MENU_ICON_ITEM_SIZE = __prev_item_size;
+            g_uiPopupTitle = -1;
+            OnRedraw();
+            qDebug() << "OnKeyPressOk::UIMENU_POPUP";
+            break;
+    case UIMENU_HASVALUE:
+            //uiProcMenuHasValue(ui.lblBackgroundFrame, g_uiMenuItems[nCurrentIndex].nMenuStr);
+            //GUI_DLG_SET_THEME();
+            //OnRedraw();
+            break;
+    case UIMENU_CUSTOM:
+    case UIMENU_CUSTOM_HASCHILD:
+            //uiProcMenuCustom(this, g_uiMenuItems[nCurrentIndex].nMenuStr);
+            //if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ADVANCEDSETTING_DEFAULT)
+            //{
+                    //GUI_DLG_SET_THEME();
+            //}
+            //OnRedraw();
+            break;
+    }
+
+
+}
+//按键上下翻动界面处理函数，传入按键值和title的索引
+void CMenu::OnKeyPressArrow(int nKey, int nTitle)
+{
+    int nItemCnt, nItemCnt1;
+    int nFirstIndex;
+    BOOL bReport;
+    nItemCnt = uiProcMenuGetItemCount(nTitle);//获取ntitle下的子数目
+    qDebug() << "nItemCnt111=="<<nItemCnt;
+    nFirstIndex = uiProcMenuTitleIndex(nTitle) + 1;//获取ntitle的第一个index
+    qDebug() << "nFirstIndex111=="<<nFirstIndex;
+
+    //nfirstindex前后判断
+    bReport = ((int)g_uiMenuItems[nFirstIndex-1].szIconFile == UIMENU_REPORT) ||
+            ((int)g_uiMenuItems[nFirstIndex-1].szIconFile == UIMENU_REPORT_NOICON);
+
+    switch (nKey)
+    {
+    case UIKEY_UP:
+            /*if ((g_uiMenuItems[nFirstIndex-1].nMenuStr == UISTR_MENU_ENROLLNEW) ||
+                    (g_uiMenuItems[nFirstIndex-1].nMenuStr == UISTR_MENU_ENROLLDELETE))
+            {
+                    nItemCnt1 = (nItemCnt + ENROLLMENU_ROWCOUNT - 1) / ENROLLMENU_ROWCOUNT * ENROLLMENU_ROWCOUNT;
+                    if ((nItemCnt1 > ENROLLMENU_ROWCOUNT) && ((g_uiMenuItemIndex - nFirstIndex) % ENROLLMENU_ROWCOUNT > (nItemCnt - 1) % ENROLLMENU_ROWCOUNT))
+                            nItemCnt1 -= ENROLLMENU_ROWCOUNT;
+                    g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt1 - ENROLLMENU_ROWCOUNT) % nItemCnt1;
+            }
+            else*/
+            g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt - 1) % nItemCnt;
+            qDebug() << "g_uiMenuItemIndex111=="<<g_uiMenuItemIndex;
+            break;
+    case UIKEY_DOWN:
+            /*if ((g_uiMenuItems[nFirstIndex-1].nMenuStr == UISTR_MENU_ENROLLNEW) ||
+                    (g_uiMenuItems[nFirstIndex-1].nMenuStr == UISTR_MENU_ENROLLDELETE))
+            {
+                    nItemCnt1 = (nItemCnt + ENROLLMENU_ROWCOUNT - 1) / ENROLLMENU_ROWCOUNT * ENROLLMENU_ROWCOUNT;
+                    if ((nItemCnt1 > ENROLLMENU_ROWCOUNT) && ((g_uiMenuItemIndex - nFirstIndex) % ENROLLMENU_ROWCOUNT > (nItemCnt - 1) % ENROLLMENU_ROWCOUNT))
+                            nItemCnt1 -= ENROLLMENU_ROWCOUNT;
+                    g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt1 + ENROLLMENU_ROWCOUNT) % nItemCnt1;
+            }
+            else*/
+            g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt + 1) % nItemCnt;
+            qDebug() << "g_uiMenuItemIndex222=="<<g_uiMenuItemIndex;
+            break;
+    }
+    qDebug() << "bReport111=="<<bReport;
+    if (bReport)
+    {
+            if (g_uiMenuItemIndex < g_uiMenuTopIndex)
+                    g_uiMenuTopIndex = g_uiMenuItemIndex;
+            if (g_uiMenuItemIndex + 1 > g_uiMenuTopIndex + MENUITEM_ROWS)
+                    g_uiMenuTopIndex = g_uiMenuItemIndex - MENUITEM_ROWS + 1;
+    }
+
+    OnRedraw();//退出前绘制标题
+}
+
+
 
 
 

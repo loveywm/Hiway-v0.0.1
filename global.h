@@ -96,7 +96,7 @@ typedef unsigned long			LPARAM;
 #define UI_IP_MAKE(a,b,c,d) (((a)<<24) | ((b)<<16) | ((c)<<8) | (d))
 #define UI_IP_UNMAKE(ip, a,b,c,d) { (a)=((ip)>>24)&0xFF; (b)=((ip)>>16)&0xFF; (c)=((ip)>>8)&0xFF; (d)=(ip)&0xFF; }
 
-#define POST_EVENTS()			{QApplication::processEvents(); ioctl(g_hTftLcd, FBIOBLANK, FBINFO_ROTATE);}
+#define POST_EVENTS()			{QApplication::processEvents(); /*ioctl(g_hTftLcd, FBIOBLANK, FBINFO_ROTATE);*/}
 #define ITEM_CNT(_x_)			(sizeof((_x_)) / sizeof((_x_)[0]))
 #define WAIT_EVENT(_e_)			{while((_e_)) { POST_EVENTS(); }}
 

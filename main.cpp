@@ -36,17 +36,12 @@ int main(int argc, char *argv[])
     //CMainWindow w;
     //w.show();
 
-    //sleep(5);
-    //g_MainWindow->DrawClock(TRUE);
+    //CMenu m(g_MainWindow);
+    //m.show();
+    //m.MenuProc(UISTR_MENU_MAINMENU);
+/*while(1){
     //g_MainWindow->show();
-    //sleep(15);
-    //a.exec();
-    //qDebug() << "keycode==ok";
-    CMenu m(g_MainWindow);
-    m.show();
-    m.MenuProc(UISTR_MENU_MAINMENU);
-while(1){
-    //g_MainWindow->show();
+    QApplication::processEvents();
     //g_MainWindow->
     //qDebug() << "keycode==ok"<< 1;
     BOOL keycode = 0;
@@ -55,9 +50,12 @@ while(1){
     {
         case 13:
             qDebug() << "keycode==ok"<<13;
+            //m.hide();
             break;
         case 19:
             qDebug() << "keycode==menu"<<19;
+            //m.show();
+            //m.MenuProc(UISTR_MENU_MAINMENU);
             break;
         case 14:
             qDebug() << "keycode==up"<<14;
@@ -67,6 +65,7 @@ while(1){
             break;
         case 1:
             qDebug() << "keycode==left"<<1;
+            //m.hide();
             break;
         case 2:
             qDebug() << "keycode==right"<<2;
@@ -75,46 +74,18 @@ while(1){
             break;
 
     }
-}
+}*/
 
- /*   while(TRUE)
+    while(TRUE)
     {
         CMainWindow *w = new CMainWindow;
         if(w)
         {
-            w->DrawClock(TRUE);
-            w->show();
-            //CMenu m(g_MainWindow);
-            //m.show();
-            //m.MenuProc(UISTR_MENU_MAINMENU);
-            //m.hide();
-            int xxx = 1;
-            while(1)
-            {
-                if(xxx == 1)
-                {
-                    //m.show();
-                    //m.MenuProc(UISTR_MENU_MAINMENU);
-                    //m.update();
-                    //update();
-                    sleep(1);
-                    xxx = 2;
-                    qDebug() << "xxx =1 ";
-                }
-                if(xxx == 2)
-                {
-                    //m.hide();
-                    //m.MenuProc(UISTR_MENU_MAINMENU);
-                    sleep(1);
-                    xxx = 1;
-                    qDebug() << "xxx =2";
-                }
-            }
-            //uiProcMain(bFirst);
-            //delete w;
+            uiProcMain(bFirst);
+            delete w;
         }
-        //bFirst = FALSE;
-    }*/
+        bFirst = FALSE;
+    }
 
     //return FALSE;
     return app.exec();

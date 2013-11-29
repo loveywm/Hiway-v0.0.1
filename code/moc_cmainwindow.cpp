@@ -1,7 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cmainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
+** Created: Fri Nov 29 10:35:56 2013
+**      by: The Qt Meta Object Compiler version 61 (Qt 4.5.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -9,8 +10,8 @@
 #include "../gui/cmainwindow.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'cmainwindow.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.4. It"
+#elif Q_MOC_OUTPUT_REVISION != 61
+#error "This file was generated using the moc from 4.5.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -19,15 +20,13 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_CMainWindow[] = {
 
  // content:
-       6,       // revision
+       2,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       1,   12, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
-       0,       // flags
-       0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
       13,   12,   12,   12, 0x0a,
@@ -39,35 +38,14 @@ static const char qt_meta_stringdata_CMainWindow[] = {
     "CMainWindow\0\0OnTimer()\0"
 };
 
-void CMainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        Q_ASSERT(staticMetaObject.cast(_o));
-        CMainWindow *_t = static_cast<CMainWindow *>(_o);
-        switch (_id) {
-        case 0: _t->OnTimer(); break;
-        default: ;
-        }
-    }
-    Q_UNUSED(_a);
-}
-
-const QMetaObjectExtraData CMainWindow::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
-};
-
 const QMetaObject CMainWindow::staticMetaObject = {
     { &QWidget::staticMetaObject, qt_meta_stringdata_CMainWindow,
-      qt_meta_data_CMainWindow, &staticMetaObjectExtraData }
+      qt_meta_data_CMainWindow, 0 }
 };
-
-#ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &CMainWindow::getStaticMetaObject() { return staticMetaObject; }
-#endif //Q_NO_DATA_RELOCATION
 
 const QMetaObject *CMainWindow::metaObject() const
 {
-    return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
+    return &staticMetaObject;
 }
 
 void *CMainWindow::qt_metacast(const char *_clname)
@@ -84,8 +62,10 @@ int CMainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
-            qt_static_metacall(this, _c, _id, _a);
+        switch (_id) {
+        case 0: OnTimer(); break;
+        default: ;
+        }
         _id -= 1;
     }
     return _id;

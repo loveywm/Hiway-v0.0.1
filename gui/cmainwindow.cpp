@@ -20,6 +20,24 @@ extern unsigned int nTouchX, nTouchY, nTouchPress;
 /////////////////////////////////////////////////
 void uiProcKeyboardManager(void)
 {
+    int nKey;
+    nKey = GetKey();
+    if(nKey == UIKEY_NONE)
+    {
+        return;
+    }
+    if(nKey == UIKEY_2)//right
+    {
+        qDebug() << "nKey == UIKEY_2";
+    }
+    else if (nKey == UIKEY_MENU)
+    {
+        CMenu m(g_MainWindow);
+        m.show();
+        m.MenuProc(UISTR_MENU_MAINMENU);
+    }
+
+/*
    uiGetTs();
    if ((nTouchX >= Ts_MainWindowNum_Min_X) && (nTouchX <= Ts_MainWindowNum_Max_X) && (nTouchY >= Ts_MainWindowNum_Min_Y) && (nTouchY <= Ts_MainWindowNum_Max_Y))
    {
@@ -30,10 +48,12 @@ void uiProcKeyboardManager(void)
    }
    qDebug("nTouchX2==%d",nTouchX);
    qDebug("nTouchY2==%d",nTouchY);
-
+*/
 }
 
-
+////////////////////////////////////////////////
+#define UIPROC_WRAPPER(_f_)	{POST_EVENTS(); (_f_);}
+////////////////////////////////////////////////
 void uiProcMain(BOOL bFirst)
 {
     qDebug() << "i am in uiProcMain!";
@@ -42,20 +62,23 @@ void uiProcMain(BOOL bFirst)
         qDebug() << "g_MainWindow = NULL";
         return;
     }
+    //QApplication::processEvents();
     g_MainWindow->DrawClock(TRUE);
     g_MainWindow->show();
-    sleep(2);
+    QApplication::processEvents();
+    //sleep(2);
     while(1)
     {
-        uiProcKeyboardManager();
+        //uiProcKeyboardManager();
         //g_MainWindow->show();
         //sleep(1);
-        CMenu m(g_MainWindow);
-        m.show();
-        m.MenuProc(UISTR_MENU_MAINMENU);
+        //CMenu m(g_MainWindow);
+        //m.show();
+        //m.MenuProc(UISTR_MENU_MAINMENU);
+        UIPROC_WRAPPER(uiProcKeyboardManager());
 
-
-        g_MainWindow->DrawClock(TRUE);
+        //QApplication::processEvents();
+        //g_MainWindow->DrawClock(TRUE);
 
     }
 

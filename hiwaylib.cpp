@@ -41,7 +41,16 @@ void GETTS(void)
     if(g_hTs != INVALID_HANDLE_VALUE)
     {
         for(;;){
+
+            int flags;
+            //设置位无阻塞
+            flags = fcntl(g_hTs,F_GETFL,0);
+            fcntl(g_hTs,F_SETFL,flags|O_NONBLOCK);
+
         read(g_hTs,&TS_DATA,sizeof(struct input_event));
+
+            fcntl(g_hTs,F_SETFL,flags);
+
         if (TS_DATA.type == EV_ABS)
         {
             if(TS_DATA.code==ABS_X)
@@ -131,11 +140,22 @@ BOOL GetKey(void/*BOOL blong*/)
 
     if(GetMainTickCount() - g_dwReadKeyTime > 100)
     {
+        //fd_set rset;
+        //struct timeval tval;
+        int flags;
+        //设置位无阻塞
+        flags = fcntl(g_hKeyBoard,F_GETFL,0);
+        fcntl(g_hKeyBoard,F_SETFL,flags|O_NONBLOCK);
+
+
         g_dwReadKeyTime = GetMainTickCount();
         read(g_hKeyBoard,&KB_DATA,sizeof(struct input_event));//阻塞的读取
+
+        fcntl(g_hKeyBoard,F_SETFL,flags);
+
         if(KB_DATA .type == 1)
         {
-            qDebug() << "xxxxxxxxxxxxxxxxxxxx";
+            //qDebug() << "xxxxxxxxxxxxxxxxxxxx";
             if(KB_DATA.code == UIKEY_OK)//13
             {
                 if(KB_DATA.value == 1 /*|| KB_DATA.value == 2*/)

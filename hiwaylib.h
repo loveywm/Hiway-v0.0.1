@@ -7,8 +7,8 @@ typedef unsigned char			BOOL;
 typedef enum
 {
         UIKEY_0,
-        UIKEY_1 = 1,
-        UIKEY_2 = 2,
+        UIKEY_1 = 1,//left
+        UIKEY_2 = 2,//rignt
         UIKEY_3,
         UIKEY_4,
         UIKEY_5,

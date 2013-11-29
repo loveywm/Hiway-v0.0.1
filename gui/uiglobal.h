@@ -10,6 +10,8 @@ typedef unsigned int                  DWORD;
 
 
 void uiLcdSetLabelText(QLabel *pLabel, QString str, QColor color,QColor edge_color = QColor(),QString strName = QString(""));
+void uiLcdDrawText(QPainter *painter, int x, int y, int w, int h, int align, QString str, QColor color, QColor edge_color = QColor());
+
 
 int GetMainTickCount(void);
 

@@ -50,6 +50,31 @@ void uiLcdSetLabelText(QLabel *pLabel, QString str, QColor color,QColor edge_col
     pLabel->setPixmap(pmap);
 }
 
+void uiLcdDrawText(QPainter *painter, int x, int y, int w, int h, int align, QString str, QColor color, QColor edge_color /*= FOREGROUND_COLOR1*/)
+{
+        if (!painter)
+                return;
+// 	int r = FOREGROUND_COLOR1.red()/*color.red()*/;
+// 	int g = FOREGROUND_COLOR1.green()/*color.green()*/;
+// 	int b = FOREGROUND_COLOR1.blue()/*color.blue()*/;
+        int r = edge_color.red()/*color.red()*/;
+        int g = edge_color.green()/*color.green()*/;
+        int b = edge_color.blue()/*color.blue()*/;
+
+        if(edge_color.isValid())
+        {
+                painter->setPen(QColor(255 - r, 255 - g, 255 - b, 64));
+                painter->drawText(x-1, y-1, w, h, align, str);
+                painter->setPen(QColor(255 - r, 255 - g, 255 - b, 100));
+                painter->drawText(x-1, y+1, w, h, align, str);
+                painter->drawText(x+1, y-1, w, h, align, str);
+                painter->setPen(QColor(255 - r, 255 - g, 255 - b, 128));
+                painter->drawText(x+1, y+1, w, h, align, str);
+        }
+        painter->setPen(color);
+        painter->drawText(x, y, w, h, align, str);
+}
+
 ////////////////////////////下面几个是时间函数，主要获取间隔时间/////////////////////////////////////////
 int GetMainTickCount(void)
 {

@@ -15,5 +15,11 @@
         <file>res/bg-main1.png</file>
         <file>res/USERMANAGE.png</file>
         <file>res/FP.png</file>
+        <file>res/USED_USERS.png</file>
+        <file>res/USED_FP.png</file>
+        <file>res/ENROLLNEW.png</file>
+        <file>res/ENROLLEDIT.png</file>
+        <file>res/ENROLLDEL.png</file>
+        <file>res/DEVICEINFO.png</file>
     </qresource>
 </RCC>
