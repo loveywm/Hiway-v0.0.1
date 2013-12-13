@@ -1,10 +1,9 @@
 /********************************************************************************
-** Form generated from reading ui file 'cenrollstep1.ui'
+** Form generated from reading UI file 'cenrollstep1.ui'
 **
-** Created: Mon Dec 2 17:00:11 2013
-**      by: Qt User Interface Compiler version 4.5.0
+** Created by: Qt User Interface Compiler version 4.8.4
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_CENROLLSTEP1_H
@@ -117,7 +116,6 @@ public:
         lblTitleBackground->setText(QString());
         lblTitleIcon->setText(QString());
         lblTitleText->setText(QApplication::translate("CEnrollStep1", "Title", 0, QApplication::UnicodeUTF8));
-        Q_UNUSED(CEnrollStep1);
     } // retranslateUi
 
 };

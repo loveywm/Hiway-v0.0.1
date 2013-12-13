@@ -1,10 +1,9 @@
 /********************************************************************************
-** Form generated from reading ui file 'cmainwindow.ui'
+** Form generated from reading UI file 'cmainwindow.ui'
 **
-** Created: Mon Dec 2 17:00:11 2013
-**      by: Qt User Interface Compiler version 4.5.0
+** Created by: Qt User Interface Compiler version 4.8.4
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_CMAINWINDOW_H
@@ -76,7 +75,6 @@ public:
         label->setText(QApplication::translate("CMainWindow", "Hiway", 0, QApplication::UnicodeUTF8));
         lblTime->setText(QApplication::translate("CMainWindow", "Time", 0, QApplication::UnicodeUTF8));
         lblDate->setText(QApplication::translate("CMainWindow", "Date", 0, QApplication::UnicodeUTF8));
-        Q_UNUSED(CMainWindow);
     } // retranslateUi
 
 };

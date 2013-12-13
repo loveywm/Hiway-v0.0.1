@@ -34,6 +34,7 @@ CEnrollStep1::CEnrollStep1(QWidget *parent /* = NULL */, UINT64 nID /* = 0 */, B
     QString szTitle = QString("[%1]-%2")
             .arg(UISTR(UISTR_USER_NEW))
             .arg(UISTR(bNew ? UISTR_MENU_ENROLLNEWFP : UISTR_MENU_ENROLLBACKUP));
+    //ui->lblTitleText->setFont(SB_FONT_15());
     uiLcdSetLabelText(ui->lblTitleText,szTitle,TITLECOLOR,QColor());
     //int nParts = DbPartCount();
     //for (int i=0; i<nParts; i++)
@@ -90,7 +91,7 @@ int CEnrollStep1::DoProcess(int nEdit /*=0*/)//注册处理第一步
         {
                 POST_EVENTS();
                 //DM9000_Check();
-                nKey = GetKey();
+                //nKey = GetKey();
 
                 switch (nKey)
                 {
@@ -118,7 +119,7 @@ _lExit:
 void CEnrollStep1::OnFocusChanged(QWidget *from, QWidget *to)
 {
         BOOL  bResult;
-        qDebug("xxxx1");
+        //qDebug("xxxx1");
         if (from == (QWidget*)ui->txtID)
         {
                 qDebug("xxxx2");

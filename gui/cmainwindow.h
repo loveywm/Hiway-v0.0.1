@@ -2,6 +2,7 @@
 #define CMAINWINDOW_H
 
 #include <QWidget>
+#include <QKeyEvent>
 
 //#include "Define.h"
 #include "ui_cmainwindow.h"
@@ -24,6 +25,10 @@ public:
 
 public Q_SLOTS:;
     void OnTimer();
+
+//位了pc端模拟测试
+protected:
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     Ui::CMainWindow *ui;

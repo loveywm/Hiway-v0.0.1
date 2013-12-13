@@ -1,8 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cenrollstep1.h'
 **
-** Created: Mon Dec 2 16:50:02 2013
-**      by: The Qt Meta Object Compiler version 61 (Qt 4.5.0)
+** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,8 +9,8 @@
 #include "../gui/cenrollstep1.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'cenrollstep1.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 61
-#error "This file was generated using the moc from 4.5.0. It"
+#elif Q_MOC_OUTPUT_REVISION != 63
+#error "This file was generated using the moc from 4.8.4. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,13 +19,15 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_CEnrollStep1[] = {
 
  // content:
-       2,       // revision
+       6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   12, // methods
+       2,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
       22,   14,   13,   13, 0x0a,
@@ -41,14 +42,36 @@ static const char qt_meta_stringdata_CEnrollStep1[] = {
     "BOOL\0OnBtnESC()\0"
 };
 
+void CEnrollStep1::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        Q_ASSERT(staticMetaObject.cast(_o));
+        CEnrollStep1 *_t = static_cast<CEnrollStep1 *>(_o);
+        switch (_id) {
+        case 0: _t->OnFocusChanged((*reinterpret_cast< QWidget*(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
+        case 1: { BOOL _r = _t->OnBtnESC();
+            if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
+        default: ;
+        }
+    }
+}
+
+const QMetaObjectExtraData CEnrollStep1::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
 const QMetaObject CEnrollStep1::staticMetaObject = {
     { &QDialog::staticMetaObject, qt_meta_stringdata_CEnrollStep1,
-      qt_meta_data_CEnrollStep1, 0 }
+      qt_meta_data_CEnrollStep1, &staticMetaObjectExtraData }
 };
+
+#ifdef Q_NO_DATA_RELOCATION
+const QMetaObject &CEnrollStep1::getStaticMetaObject() { return staticMetaObject; }
+#endif //Q_NO_DATA_RELOCATION
 
 const QMetaObject *CEnrollStep1::metaObject() const
 {
-    return &staticMetaObject;
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
 void *CEnrollStep1::qt_metacast(const char *_clname)
@@ -65,12 +88,8 @@ int CEnrollStep1::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        switch (_id) {
-        case 0: OnFocusChanged((*reinterpret_cast< QWidget*(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
-        case 1: { BOOL _r = OnBtnESC();
-            if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
-        default: ;
-        }
+        if (_id < 2)
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 2;
     }
     return _id;

@@ -51,6 +51,40 @@ void uiProcKeyboardManager(void)
    qDebug("nTouchY2==%d",nTouchY);
 */
 }
+void uiProcKeyboardManager_pc(void)
+{
+    int nKey;
+    //nKey = GetKey();
+    nKey = g_keyvalue;
+    if(nKey == UIKEY_NONE)
+    {
+        return;
+    }
+    if(nKey == UIKEY_2)//right
+    {
+        qDebug() << "nKey == UIKEY_2";
+    }
+    else if (nKey == UIKEY_MENU)
+    {
+        CMenu m(g_MainWindow);
+        m.show();
+        m.MenuProc(UISTR_MENU_MAINMENU);
+    }
+
+/*
+   uiGetTs();
+   if ((nTouchX >= Ts_MainWindowNum_Min_X) && (nTouchX <= Ts_MainWindowNum_Max_X) && (nTouchY >= Ts_MainWindowNum_Min_Y) && (nTouchY <= Ts_MainWindowNum_Max_Y))
+   {
+           qDebug("nTouchX1==%d",nTouchX);
+           qDebug("nTouchY1==%d",nTouchY);
+           qDebug("uiProcKeyboardManager");
+           return;
+   }
+   qDebug("nTouchX2==%d",nTouchX);
+   qDebug("nTouchY2==%d",nTouchY);
+*/
+}
+
 
 ////////////////////////////////////////////////
 #define UIPROC_WRAPPER(_f_)	{POST_EVENTS(); (_f_);}
@@ -80,7 +114,9 @@ void uiProcMain(BOOL bFirst)
         //CMenu m(g_MainWindow);
         //m.show();
         //m.MenuProc(UISTR_MENU_MAINMENU);
-        UIPROC_WRAPPER(uiProcKeyboardManager());
+        UIPROC_WRAPPER(uiProcKeyboardManager_pc());
+
+
 
         //QApplication::processEvents();
         //g_MainWindow->DrawClock(TRUE);
@@ -114,8 +150,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
     QPalette palTime = ui->lblTime->palette();
     palTime.setColor(QPalette::All,QPalette::WindowText,QColor(255,255,214));
     ui->lblTime->setPalette(palTime);
-    ui->lblTime->setFont(SB_FONT_15());
-    ui->lblDate->setFont(SB_FONT_13());
+    //ui->lblTime->setFont(SB_FONT_15());
+    //ui->lblDate->setFont(SB_FONT_13());
 
     //ui->lblTime->setAlignment(Qt::Alignment);
     //ui->lblDate->setAlignment(Qt::Alignment);
@@ -176,7 +212,7 @@ void CMainWindow::DrawClock(BOOL bFirst /*bFirst = FALSE*/)
    //QPixmap pmap = m_ClockPixmap;
    //QPainter painter(&pmap);
    int nYear, nMonth, nDay, nWeekday, nHour, nMinute, nSecond;
-/*
+
    QDate date = QDate::currentDate();
    QTime time = QTime::currentTime();
    nYear = date.year();
@@ -186,8 +222,9 @@ void CMainWindow::DrawClock(BOOL bFirst /*bFirst = FALSE*/)
    nHour = time.hour();
    nMinute = time.minute();
    nSecond = time.second();
-*/
-   Rtc_Get_time(&nYear,&nMonth,&nDay,&nWeekday,&nHour,&nMinute,&nSecond);
+
+   //embedded
+   //Rtc_Get_time(&nYear,&nMonth,&nDay,&nWeekday,&nHour,&nMinute,&nSecond);
 
    //char szBuffer[12];
    //uiRtcGet(&nYear, &nMonth, &nDay, &nWeekday, &nHour, &nMinute, &nSecond);
@@ -245,4 +282,17 @@ void CMainWindow::DrawClock(BOOL bFirst /*bFirst = FALSE*/)
     }
 
 
+}
+
+void CMainWindow::keyPressEvent(QKeyEvent *e)
+{
+    //g_keyvalue = 0;
+    switch (e->key())
+    {
+       case Qt::Key_W : qDebug() << "Up!";break;
+       case Qt::Key_S : qDebug() << "Down";  g_keyvalue = UIKEY_DOWN;break;
+       case Qt::Key_A : qDebug() << "Left"; break;
+       case Qt::Key_D : qDebug() << "Right"; break;
+       case Qt::Key_M : qDebug() << "Menu"; g_keyvalue = UIKEY_MENU;break;
+    }
 }

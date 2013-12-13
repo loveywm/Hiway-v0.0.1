@@ -345,9 +345,9 @@ int HIWAY_INIT0(void)
         int nRet;
         BOOL bResult;
 
-        DEVINIT_WRAPPER(InitTouchScreen(), DEVERR_TS);
-        DEVINIT_WRAPPER(InitRtcClock(), DEVERR_RTC);
-        DEVINIT_WRAPPER(InitKeyBoard(), DEVERR_KEYBOARD);
+        //DEVINIT_WRAPPER(InitTouchScreen(), DEVERR_TS);
+        //DEVINIT_WRAPPER(InitRtcClock(), DEVERR_RTC);
+        //DEVINIT_WRAPPER(InitKeyBoard(), DEVERR_KEYBOARD);
 
         return DEVERR_SUCCESS;
 

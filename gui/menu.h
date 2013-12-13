@@ -1,6 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 #include "cmainframe.h"
+#include <QKeyEvent>
 
 
 class CMenu : public CMainFrame
@@ -22,6 +23,8 @@ protected:
     void drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to);
     void drawReportStyle(QPainter *painter, int nCurrentIndex, int from, int to, bool bDrawIcon);
 
+    //位了pc端模拟测试
+    void keyPressEvent(QKeyEvent *e);
 private:
     unsigned char m_bTerminateFlag;
 };

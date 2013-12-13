@@ -151,6 +151,11 @@ extern HFILE    g_hKeyBoard;
 extern BOOL     g_uiBuildMenu;
 extern DWORD    g_uiTimeLastAction;
 extern USER_INFO g_UserInfoTemp;
+extern int      g_keyvalue;
+
+extern DBLICENSE                dbLicense;
+extern DBSETUP_TOTAL            dbSetupTotal;
+extern USER_INFO*		gpUserInfoEnrollData;
 
 ////////////////////////////////////////
 #endif // GLOBAL_H

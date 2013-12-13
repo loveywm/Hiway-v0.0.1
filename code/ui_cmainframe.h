@@ -1,10 +1,9 @@
 /********************************************************************************
-** Form generated from reading ui file 'cmainframe.ui'
+** Form generated from reading UI file 'cmainframe.ui'
 **
-** Created: Mon Dec 2 17:00:11 2013
-**      by: Qt User Interface Compiler version 4.5.0
+** Created by: Qt User Interface Compiler version 4.8.4
 **
-** WARNING! All changes made in this file will be lost when recompiling ui file!
+** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
 #ifndef UI_CMAINFRAME_H
@@ -89,7 +88,6 @@ public:
         lblTitleIcon->setText(QString());
         lblTitleText->setText(QString());
         lblTitleText1->setText(QString());
-        Q_UNUSED(CMainFrame);
     } // retranslateUi
 
 };

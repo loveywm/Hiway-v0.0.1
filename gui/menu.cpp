@@ -636,8 +636,10 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
             uiProcBuildMenu();
             goto _lstart;
         }
-
-        nKey = GetKey();
+        //embedded
+        //nKey = GetKey();
+        nKey = g_keyvalue;
+        g_keyvalue = 0;
         switch(nKey)
         {
         case UIKEY_OK://13
@@ -661,7 +663,7 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
             qDebug() << "keycode==esc"<<1;
             goto _Exit;
             break;
-        case 2:
+        case UIKEY_2:
             qDebug() << "keycode==right"<<2;
             break;
         default:
@@ -1007,9 +1009,9 @@ _lPopupExit:
             uiProcMenuCustom(this, g_uiMenuItems[nCurrentIndex].nMenuStr);
             //if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ADVANCEDSETTING_DEFAULT)
             //{
-                GUI_DLG_SET_THEME();
+            //GUI_DLG_SET_THEME();
             //}
-            OnRedraw();
+            //OnRedraw();
             qDebug() << "OnKeyPressOk::UIMENU_CUSTOM";
             break;
     }
@@ -1071,6 +1073,18 @@ void CMenu::OnKeyPressArrow(int nKey, int nTitle)
     }
 
     OnRedraw();//退出前绘制标题
+}
+
+void CMenu::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key())
+    {
+       case Qt::Key_W : qDebug() << "Up";      g_keyvalue = UIKEY_UP;break;
+       case Qt::Key_S : qDebug() << "Down";     g_keyvalue = UIKEY_DOWN;break;
+       case Qt::Key_E : qDebug() << "ESC";      g_keyvalue = UIKEY_1;break;
+       case Qt::Key_O : qDebug() << "OK";       g_keyvalue = UIKEY_OK;break;
+       case Qt::Key_M : qDebug() << "Menu";     g_keyvalue = UIKEY_MENU;break;
+    }
 }
 
 

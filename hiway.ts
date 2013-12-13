@@ -6,7 +6,7 @@
     <message>
         <location filename="gui/cenrollstep1.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="gui/cenrollstep1.ui" line="26"/>
@@ -90,122 +90,122 @@
     <message>
         <location filename="gui/uiFont.cpp" line="6"/>
         <source>1.EnrallFP</source>
-        <translation type="unfinished"></translation>
+        <translation>指纹注册</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="7"/>
         <source>1.EnrallPWD</source>
-        <translation type="unfinished"></translation>
+        <translation>密码注册</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="8"/>
         <source>1.UserDataView</source>
-        <translation type="unfinished"></translation>
+        <translation>用户信息查询</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="9"/>
         <source>1.SetTime</source>
-        <translation type="unfinished"></translation>
+        <translation>时间设置</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="10"/>
         <source>1.USBManager</source>
-        <translation type="unfinished"></translation>
+        <translation>U盘管理</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="11"/>
         <source>1.OtherInfo</source>
-        <translation type="unfinished"></translation>
+        <translation>其他设备信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="14"/>
         <source>2.OneGlogLoad</source>
-        <translation type="unfinished"></translation>
+        <translation>下载单个用户验证信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="15"/>
         <source>2.AllGlogLoad</source>
-        <translation type="unfinished"></translation>
+        <translation>下载所有验证信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="16"/>
         <source>2.AllManagerGlogLoad</source>
-        <translation type="unfinished"></translation>
+        <translation>下载管理员验证信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="17"/>
         <source>2.OneUserInfoDown</source>
-        <translation type="unfinished"></translation>
+        <translation>下载单个用户信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="18"/>
         <source>2.AllUserInfoDown</source>
-        <translation type="unfinished"></translation>
+        <translation>下载所有用户信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="19"/>
         <source>2.UserInfoUp</source>
-        <translation type="unfinished"></translation>
+        <translation>上传用户信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="22"/>
         <source>2.UserGlogInfo</source>
-        <translation type="unfinished"></translation>
+        <translation>系统额定信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="23"/>
         <source>2.DeviceInfo</source>
-        <translation type="unfinished"></translation>
+        <translation>设备信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="26"/>
         <source>3.USERENROLLCOUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>注册用户总数</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="27"/>
         <source>3.FPENROLLCOUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>指纹注册用户数</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="28"/>
         <source>3.PWDENROLLCOUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>密码注册用户数</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="29"/>
         <source>3.GLOGCOUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>验证记录数</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="30"/>
         <source>3.MLOGCOUNT</source>
-        <translation type="unfinished"></translation>
+        <translation>管理员验证记录数</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="37"/>
         <source>USERMANAGE</source>
-        <translation type="unfinished"></translation>
+        <translation>用户管理</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="38"/>
         <source>ENROLLBACKUP</source>
-        <translation type="unfinished"></translation>
+        <translation>修改信息</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="39"/>
         <source>USER_NEW</source>
-        <translation type="unfinished"></translation>
+        <translation>新注册</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="40"/>
         <source>USER_NAME</source>
-        <translation type="unfinished"></translation>
+        <translation>用户姓名</translation>
     </message>
     <message>
         <location filename="gui/uiFont.cpp" line="41"/>
         <source>USER_ID</source>
-        <translation type="unfinished"></translation>
+        <translation>用户ID</translation>
     </message>
     <message>
         <source>2.UserManage</source>
