@@ -8,7 +8,7 @@
 #include <QLabel>
 
 #include "../hiwaylib.h"
-#include "uiglobal.h"
+#include "Define.h"
 #include "menu.h"
 
 
@@ -16,6 +16,7 @@
 void uiProcMain(BOOL bFirst);
 CMainWindow *g_MainWindow = NULL;
 extern unsigned int nTouchX, nTouchY, nTouchPress;
+void uiProcBuildMenu(void);
 
 /////////////////////////////////////////////////
 void uiProcKeyboardManager(void)
@@ -62,6 +63,10 @@ void uiProcMain(BOOL bFirst)
         qDebug() << "g_MainWindow = NULL";
         return;
     }
+
+    uiProcBuildMenu();
+
+
     //QApplication::processEvents();
     g_MainWindow->DrawClock(TRUE);
     g_MainWindow->show();
@@ -109,7 +114,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
     QPalette palTime = ui->lblTime->palette();
     palTime.setColor(QPalette::All,QPalette::WindowText,QColor(255,255,214));
     ui->lblTime->setPalette(palTime);
-    ui->lblTime->setFont(SB_FONT_16());
+    ui->lblTime->setFont(SB_FONT_15());
     ui->lblDate->setFont(SB_FONT_13());
 
     //ui->lblTime->setAlignment(Qt::Alignment);
@@ -171,7 +176,7 @@ void CMainWindow::DrawClock(BOOL bFirst /*bFirst = FALSE*/)
    //QPixmap pmap = m_ClockPixmap;
    //QPainter painter(&pmap);
    int nYear, nMonth, nDay, nWeekday, nHour, nMinute, nSecond;
-
+/*
    QDate date = QDate::currentDate();
    QTime time = QTime::currentTime();
    nYear = date.year();
@@ -181,8 +186,8 @@ void CMainWindow::DrawClock(BOOL bFirst /*bFirst = FALSE*/)
    nHour = time.hour();
    nMinute = time.minute();
    nSecond = time.second();
-
-   //Rtc_Get_time(&nYear,&nMonth,&nDay,&nWeekday,&nHour,&nMinute,&nSecond);
+*/
+   Rtc_Get_time(&nYear,&nMonth,&nDay,&nWeekday,&nHour,&nMinute,&nSecond);
 
    //char szBuffer[12];
    //uiRtcGet(&nYear, &nMonth, &nDay, &nWeekday, &nHour, &nMinute, &nSecond);

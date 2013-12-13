@@ -1,5 +1,6 @@
 #include "hiwaylib.h"
 #include "include/rtc.h"
+#include "../gui/Define.h"
 
 
 #include <QDebug>
@@ -137,7 +138,7 @@ BOOL GetKey(void/*BOOL blong*/)
         qDebug() << "g_hKeyBoard == INVALID_HANDLE_VALUE";
         return UIKEY_NONE;
     }
-
+    //uiTimeSetLastActionTime();//设置此时操作时间
     if(GetMainTickCount() - g_dwReadKeyTime > 100)
     {
         //fd_set rset;
@@ -345,7 +346,7 @@ int HIWAY_INIT0(void)
         BOOL bResult;
 
         DEVINIT_WRAPPER(InitTouchScreen(), DEVERR_TS);
-        //DEVINIT_WRAPPER(InitRtcClock(), DEVERR_RTC);
+        DEVINIT_WRAPPER(InitRtcClock(), DEVERR_RTC);
         DEVINIT_WRAPPER(InitKeyBoard(), DEVERR_KEYBOARD);
 
         return DEVERR_SUCCESS;

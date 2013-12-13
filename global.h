@@ -50,6 +50,7 @@
 //#include "../include/wdog.h"
 
 #include "hiwaylib.h"
+#include "Database.h"
 //////////////////////////////////////////////////////////////////////////
 typedef int				HFILE;
 
@@ -136,16 +137,20 @@ typedef unsigned long			LPARAM;
 
 #define G2U(s) ( QTextCodec::codecForName("GBK")->toUnicode(s) )
 #define U2G(s) ( QTextCodec::codecForName("GBK")->fromUnicode(s) )
+#define TEXTCODEC "utf8"
 
 /////////////////////////////////////////////////////////////
 extern int GetMainTickCount(void);
 
 //////////////////////////////////////////////////////////////////////////
 //Device Handles
-extern HFILE   g_hTs;
-extern HFILE   g_hRtc;
-extern HFILE   g_hKeyBoard;
+extern HFILE    g_hTs;
+extern HFILE    g_hRtc;
+extern HFILE    g_hKeyBoard;
 
-extern BOOL            g_uiBuildMenu;
+extern BOOL     g_uiBuildMenu;
+extern DWORD    g_uiTimeLastAction;
+extern USER_INFO g_UserInfoTemp;
+
 ////////////////////////////////////////
 #endif // GLOBAL_H

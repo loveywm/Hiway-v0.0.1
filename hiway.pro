@@ -21,7 +21,11 @@ SOURCES += \
     gui/uiglobal.cpp \
     gobal.cpp \
     gui/cmainwindow.cpp \
-    hiwaylib.cpp
+    hiwaylib.cpp \
+    uiRtc.cpp \
+    Database.cpp \
+    gui/UserManage.cpp \
+    gui/cenrollstep1.cpp
 
 
 
@@ -31,16 +35,19 @@ HEADERS  += \
     gui/customstyle.h \
     gui/menu.h \
     gui/uiFont.h \
-    gui/uiglobal.h \
     gui/cmainwindow.h \
     hiwaylib.h \
     global.h \
-    include/rtc.h
+    include/rtc.h \
+    Database.h \
+    gui/UserManage.h \
+    gui/cenrollstep1.h
 
 
 FORMS    += \
     gui/cmainframe.ui \
-    gui/cmainwindow.ui
+    gui/cmainwindow.ui \
+    gui/cenrollstep1.ui
 
 RESOURCES += \
     hiway.qrc

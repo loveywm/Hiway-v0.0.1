@@ -2,10 +2,13 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QDebug>
+#include <QtCore/QTextCodec>
 
 #include "../gui/cmainframe.h"
 #include "../gui/menu.h"
 #include "../gui/cmainwindow.h"
+#include "../gui/Define.h"
+#include "../gui/customstyle.h"
 #include "global.h"
 
 extern CMainWindow *g_MainWindow;
@@ -21,6 +24,13 @@ int main(int argc, char *argv[])
     BOOL bFirst = TRUE;
     QApplication app(argc, argv);
 
+    //app.setFont(SB_FONT_12());
+    //app.setFont(SB_FONT_13(), "QLineEdit");
+
+    //app.setStyle(new CustomStyle);
+    QTextCodec::setCodecForTr(QTextCodec::codecForName(TEXTCODEC));
+
+
     QTranslator translator;
     translator.load("./hiway.qm");
     app.installTranslator(&translator);
@@ -30,51 +40,6 @@ int main(int argc, char *argv[])
         qDebug() << "HIWAY_LOAD Failed!!!";
         return FALSE;
     }
-    //CMainFrame w;
-    //w.show();
-
-    //CMainWindow w;
-    //w.show();
-
-    //CMenu m(g_MainWindow);
-    //m.show();
-    //m.MenuProc(UISTR_MENU_MAINMENU);
-/*while(1){
-    //g_MainWindow->show();
-    QApplication::processEvents();
-    //g_MainWindow->
-    //qDebug() << "keycode==ok"<< 1;
-    BOOL keycode = 0;
-    keycode = GetKey();
-    switch(keycode)
-    {
-        case 13:
-            qDebug() << "keycode==ok"<<13;
-            //m.hide();
-            break;
-        case 19:
-            qDebug() << "keycode==menu"<<19;
-            //m.show();
-            //m.MenuProc(UISTR_MENU_MAINMENU);
-            break;
-        case 14:
-            qDebug() << "keycode==up"<<14;
-            break;
-        case 15:
-            qDebug() << "keycode==down"<<15;
-            break;
-        case 1:
-            qDebug() << "keycode==left"<<1;
-            //m.hide();
-            break;
-        case 2:
-            qDebug() << "keycode==right"<<2;
-            break;
-        default:
-            break;
-
-    }
-}*/
 
     while(TRUE)
     {

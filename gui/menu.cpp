@@ -4,8 +4,13 @@
 //#include "xxx.h"
 #include <QIcon>
 #include <QPainterPath>
+#include <QLineEdit>
 #include "../global.h"
 #include "ui_cmainframe.h"
+
+#include "cenrollstep1.h"
+
+
 
 QRect g_uiMenuCurrentArea;
 #define SELECTED_ITEM_FILENAME "selected-item.png"
@@ -42,12 +47,296 @@ static const char * const __RIGHT_ARROW[] =
         "*   "
 };
 
+//void uiProcEnroll(USER_INFO *pUserInfo, int nStr);
+
+/////////////////////////////////////////////////////////////
+void uiProcEnroll(USER_INFO *pUserInfo, int nStr)
+{
+    if (nStr == UISTR_MENU_ENROLLNEWFP)
+    {
+            //DIALOGBOX(CEnrollFP);
+    }
+    else if (nStr == UISTR_MENU_ENROLLNEWPWD)
+    {
+        //if (DbUserInfoFlagEnrollStatusGet(&g_UserInfoTemp, BACKUP_PASSWORD) &&
+            //!uiLcdMessageBox(UI_MSG_QUESTION, UISTR_ENROLLPWD_PWDEXIST, UITIME_OUT))
+            //goto _lExit;
+        //DWORD dwPassword = DIALOGBOX_RET(CInputPWD);
+        DWORD dwPassword = 2222;//test
+        if (dwPassword)
+        {
+            BOOL bResult;
+            //bResult = uiEnrollUserInfo(&g_UserInfoTemp);
+            if (bResult)
+            {
+                //bResult = uiPwdEnroll(&g_UserInfoTemp, PWD2STRING(dwPassword));
+                //uiLogSlogAdd(g_uiProcStatus.nIDCurrentMgr, SLOG_SETPASSWORD, gUserInfoTemp.ID, bResult);
+            }
+            //if(bResult)
+                //uiSoundOut(SOUND_OK, UI_BUZZER_OK, UITIME_VOICE);
+            //else
+                //uiLcdMessageBox(UI_MSG_ERROR, UISTR_ENROLLPWD_FAIL, UI_MSGTIMEOUT);
+        }
+    }
+    //else if (nStr == UISTR_MENU_ENROLL_RFCARD)
+    {
+
+    }
+    //else if (nStr == UISTR_MENU_ENROLL_VOICE)
+    {
+
+    }
+    //else if (nStr == UISTR_MENU_ENROLL_PHOTO)
+    {
+
+    }
+
+_lExit:
+    return;
+
+}
+//一系列处理函数
+
+void uiProcBoxWrapper(BOOL bEventHooked, BOOL bStart)
+{
+        static QWidget* pFocusWidget = NULL;
+
+        if (!bEventHooked)
+        {
+                if (bStart)
+                        pFocusWidget = qApp->focusWidget();
+                else
+                {
+                        if (pFocusWidget)
+                                pFocusWidget->setFocus(Qt::MouseFocusReason);
+                        pFocusWidget = NULL;
+                }
+        }
+}
+
+void uiProcMakeString(char *szBuf, int *nValueList, int nCount, int *Lengths, int index, int i_length, char split)
+{
+        int i, j;
+        int len;
+        char FORMAT[16];
+
+        szBuf[0] = 0;
+
+        for (i=0; i<nCount; i++)
+        {
+                len = strlen(szBuf);
+                sprintf(FORMAT, "%c0%dd", '%', Lengths[i]);
+                sprintf(&szBuf[len], FORMAT, nValueList[i]);
+                if (i == index)
+                {
+                        for (j = 0; j < Lengths[i] - i_length; j++)
+                        {
+                                szBuf[len + j] = ' ';
+                        }
+                }
+                if (split && i < nCount - 1)
+                        sprintf(&szBuf[strlen(szBuf)], "%c", split);
+        }
+}
+
+int uiProcBoxTime(QWidget* parent, int x, int y, int cx, int cy, BOOL* pbRet, int nInitial, BOOL bKeyCheck = FALSE, BOOL bAutoSize = TRUE, BOOL bSecondShow = TRUE)
+{
+        uiProcBoxWrapper(bKeyCheck, TRUE);
+
+#undef __CURSOR_POS
+#define __CURSOR_POS (nIndex * 3)
+
+        int addr[6] = {1,2,3,4,5,6};
+        int addr_length[3] = {2, 2, 2};
+        int nIndex, i_len = addr_length[0];
+        int nRet = nInitial;
+        //int nPrevTime = uiTimeGetTickCount() - 501;
+        int nPrevTime = GetMainTickCount() - 501;
+        int nKey = UIKEY_NONE;
+        BOOL bStartNew = TRUE;
+        QLineEdit txtTime(parent);
+        char szTime[24];
+//	int nCursorPos = 0;
+        int nRealWidth;
+        int nMin[] = {0,  0,  0 };
+        int nMax[] = {23, 59, 59};
+        QPalette pal = txtTime.palette();
+
+        nIndex = 0;
+
+        //uiRtcSeconds2YMDHMS((DWORD)nInitial, &addr[3], &addr[4], &addr[5], &addr[0], &addr[1], &addr[2]);
+
+        pal.setBrush(QPalette::Base, QBrush(QColor(59, 129, 212)));
+        pal.setColor(QPalette::All, QPalette::Text, FOREGROUND_COLOR1);
+        txtTime.setPalette(pal);
+
+        if (bAutoSize)
+        {
+                nRealWidth = parent->fontMetrics().width("00:00:00") + 10;
+                x = x + cx - nRealWidth;
+                cx = nRealWidth;
+        }
+
+        txtTime.setGeometry(x, y, cx, cy);
+        txtTime.setAlignment(Qt::AlignVCenter);
+        txtTime.setFocus(Qt::MouseFocusReason);
+        txtTime.show();
+
+        *pbRet = FALSE;
+        while (uiTimeIsTimeout(60000) == FALSE)
+        {
+                POST_EVENTS();
+                //DM9000_Check();
+                if (GetMainTickCount() - nPrevTime > 500)
+                {
+                        if (addr[nIndex] > nMax[nIndex])
+                        {
+                                //uiSoundOut(SOUND_ERROR, UI_BUZZER_ERROR);
+                                addr[nIndex] = nMax[nIndex];
+                                bStartNew = TRUE;
+                        }
+
+                        if (addr[nIndex] < nMin[nIndex])
+                        {
+                                //uiSoundOut(SOUND_ERROR, UI_BUZZER_ERROR);
+                                addr[nIndex] = nMin[nIndex];
+                                bStartNew = TRUE;
+                        }
+
+                        nPrevTime = GetMainTickCount();
+
+                        if (bStartNew)
+                                i_len = addr_length[nIndex];
+                        uiProcMakeString(szTime, addr, bSecondShow ? 3 : 2, addr_length, nIndex, i_len, ':');
+                        txtTime.setText(szTime);
+
+                        if (bStartNew)
+                                txtTime.setSelection(__CURSOR_POS, 2);
+                        else
+                                txtTime.setCursorPosition(__CURSOR_POS + 2);
+
+                        if (!bStartNew && i_len == addr_length[nIndex])
+                        {
+                                if(bKeyCheck)
+                                        nKey = UIKEY_OK;
+                                else
+                                        nKey = UIKEY_DOWN;
+                                goto _lKeyPressed;
+                        }
+                }
+
+                //if ((nKey = uiKeyGetKey()) == UIKEY_NONE)
+                        //continue;
+                if ((nKey = GetKey()) == UIKEY_NONE)
+                        continue;
+
+
+_lKeyPressed:
+                if (nKey == UIKEY_ESC)
+                {
+                        nRet = nInitial;
+                        break;
+                }
+
+                if (nKey == UIKEY_OK)
+                {
+                        if(!bKeyCheck)
+                        {
+                                *pbRet = TRUE;
+                                break;
+                        }
+                        else
+                        {
+                                nIndex = (nIndex + 1) % (bSecondShow ? 3 : 2);
+                                bStartNew = TRUE;
+                        }
+
+                }
+
+                if (bKeyCheck && (nKey == UIKEY_UP || nKey == UIKEY_DOWN))
+                {
+                        *pbRet = TRUE;
+                        break;
+                }
+
+                if (nKey == UIKEY_DOWN)
+                {
+                        nIndex = (nIndex + 1) % (bSecondShow ? 3 : 2);
+                        bStartNew = TRUE;
+                }
+
+                if (nKey == UIKEY_UP)
+                {
+                        nIndex = (nIndex + (bSecondShow ? 2 : 1)) % (bSecondShow ? 3 : 2);
+                        bStartNew = TRUE;
+                }
+
+        /*	if (nKey == UIKEY_UP)
+                {
+                        addr[nIndex]--;
+                        bStartNew = TRUE;
+                }
+
+                if (nKey == UIKEY_DOWN)
+                {
+                        addr[nIndex]++;
+                        bStartNew = TRUE;
+                }*/
+
+                if (nKey == UIKEY_MENU) //Backspace
+                {
+                        if (bStartNew)
+                        {
+                                addr[nIndex] = nMin[nIndex];
+                                i_len = 0;
+                                bStartNew = FALSE;
+                        }
+                        else
+                        {
+                                addr[nIndex] = addr[nIndex] / 10;
+                                if (i_len)
+                                        i_len--;
+                        }
+                }
+
+/*                if (uiKeyIsDigit((T_UI_KEY)nKey))
+                {
+                        if (bStartNew)
+                        {
+                                addr[nIndex] = (int)nKey;
+                                bStartNew = FALSE;
+                                i_len = 1;
+                        }
+                        else
+                        {
+                                addr[nIndex] = addr[nIndex] * 10 + (int)nKey;
+                                i_len++;
+                        }
+                }
+*/
+                nPrevTime = GetMainTickCount() - 501;
+        }
+
+        //if (*pbRet)
+                //nRet = (int)uiRtcGetSeconds(addr[3], addr[4], addr[5], addr[0], addr[1], addr[2]);
+        if (bKeyCheck)
+                *pbRet = nKey;
+
+        uiProcBoxWrapper(bKeyCheck, FALSE);
+        return nRet;
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////
 
 
 typedef enum//菜单的几种类型枚举
 {
     // 0,1,2,... = parent & title, UISTR_SPACE - top menu
-    UIMENU_POPUP = -1,//有二级标题
+    UIMENU_POPUP = -1,//有二级标题图标
     UIMENU_HASVALUE = -2,//有下拉设置值
     UIMENU_CUSTOM = -3,
     UIMENU_CUSTOM_HASCHILD = -4,
@@ -68,40 +357,44 @@ typedef struct//标题数据结构
 {
     int nMenuStr;//标题命名
     int nType;//标题类型“T_UI_MENUITEM_TYPE”
-    const char* szIconFile;//连接标题图标
+    const char* szIconFile;//title标题下面子栏目显示绘画方式，共四种list
     int nHelpStr;//备用
 } T_UI_MENUITEM;
 
 //日后添加标题都在这两添加
 T_UI_MENUITEM g_uiMenuItemsSrc[] =
 {
-    {UISTR_MENU_MAINMENU,       UIMENU_TITLE,       (const char*)UIMENU_ICON,   -1},
-    //{UISTR_MENU_USERMANAGE,   UIMENU_POPUP,       "FP.png",                   -1},
-    {UISTR_MENU_USERMANAGE,     UIMENU_POPUP,       "USERMANAGE.png",           -1},
-    {UISTR_MENU_DATAVIEW,       UIMENU_POPUP,       "DATAVIEW.png",             -1},
-    {UISTR_MENU_USBMANAGE,      UIMENU_POPUP,       "USBMANAGE.png",            -1},
-    {UISTR_MENU_SYSTEMSETTING,  UIMENU_POPUP,       "SYSTEMSETTING.png",        -1},
-    {UISTR_MENU_SYSINFOVIEW,    UIMENU_POPUP,       "SYSINFOVIEW.png",          -1},
+    {UISTR_MENU_MAINMENU,           UIMENU_TITLE,       (const char*)UIMENU_ICON,   -1},
+    {UISTR_MENU_ENROLLNEWFP,        UIMENU_CUSTOM,      "ENROLLNEWFP.png",          -1},
+    {UISTR_MENU_ENROLLNEWPWD,       UIMENU_CUSTOM,      "ENROLLNEWPWD.png",         -1},
+    {UISTR_MENU_USERDATAVIEW,       UIMENU_POPUP,       "USERDATAVIEW.png",         -1},
+    //{UISTR_MENU_SETTIME,            UIMENU_HASVALUE,    "SETTIME.png",              -1},
+    {UISTR_MENU_USBMANAGER,         UIMENU_POPUP,       "USBMANAGER.png",           -1},
+    {UISTR_MENU_OTHERINFO,          UIMENU_POPUP,       "OTHERINFO.png",            -1},
 
-    {UISTR_MENU_USERMANAGE,     UIMENU_TITLE,       (const char*)UIMENU_ICON,   -1},
-    {UISTR_MENU_ENROLLNEW,      UIMENU_CUSTOM,      "ENROLLNEW.png",            -1},
-    {UISTR_MENU_ENROLLEDIT,     UIMENU_CUSTOM,      "ENROLLEDIT.png",           -1},
-    {UISTR_MENU_ENROLLDEL,      UIMENU_CUSTOM,      "ENROLLDEL.png",            -1},
+    {UISTR_MENU_USBMANAGER,         UIMENU_TITLE,        (const char*)UIMENU_ICON,  -1},
+    {UISTR_MENU_ONEGLOGLOAD,        UIMENU_HASVALUE,     "MANAGER.png",             -1},
+    {UISTR_MENU_ALLGLOGLOAD,        UIMENU_HASVALUE,     "ALLGLOGLOAD.png",         -1},
+    {UISTR_MENU_ALLMANAGERGLOGLODA, UIMENU_HASVALUE,     "ALLMANAGERGLOGLODA.png",  -1},
+    {UISTR_MENU_ONEUSERINFODOWN,    UIMENU_HASVALUE,     "MANAGER.png",             -1},
+    {UISTR_MENU_ALLUSERINFODOWN,    UIMENU_HASVALUE,     "ALLUSERINFODOWN.png",     -1},
+    {UISTR_MENU_USERINFOUP,         UIMENU_HASVALUE,     "USERINFOUP.png",          -1},
+
+    {UISTR_MENU_OTHERINFO,          UIMENU_TITLE,        (const char*)UIMENU_ICON,  -1},
+    {UISTR_MENU_USERGLOGINFO,       UIMENU_POPUP,        "MANAGER.png",             -1},
+    {UISTR_MENU_DEVICEINFO,         UIMENU_POPUP,        "DEVICEINFO.png",          -1},
+
+    {UISTR_MENU_USERGLOGINFO,       UIMENU_TITLE,        (const char*)UIMENU_REPORT,-1},
+    {UISTR_MENU_USERENROLLCOUNT,    UIMENU_HASVALUE,     "USERENROLLCOUNT.png",     -1},
+    {UISTR_MENU_FPENROLLCOUNT,      UIMENU_HASVALUE,     "FPENROLLCOUNT.png",       -1},
+    {UISTR_MENU_PWDENROLLCOUNT,     UIMENU_HASVALUE,     "PWDENROLLCOUNT.png",      -1},
+    {UISTR_MENU_GLOGCOUNT,          UIMENU_HASVALUE,     "GLOGCOUNT.png",           -1},
+    {UISTR_MENU_MLOGCOUNT,          UIMENU_HASVALUE,     "MLOGCOUNT.png",           -1},
+    {UISTR_MENU_SETTIME,            UIMENU_HASVALUE,     "SETTIME.png",             -1},
 
 
-    {UISTR_MENU_SYSINFOVIEW,    UIMENU_TITLE,       (const char*)UIMENU_REPORT, -1},
-    {UISTR_MENU_USERENROLLCOUNT,UIMENU_HASVALUE,    "USED_USERS.png",           -1},
-    {UISTR_MENU_FPENROLLCOUNT,  UIMENU_HASVALUE,    "USED_FP.png",              -1},
-    //{UISTR_MENU_PWDENROLLCOUNT, UIMENU_HASVALUE,    "USED_PWD.png",             -1},
-    //{UISTR_MENU_CARDENROLLCOUNT,UIMENU_HASVALUE,    "USED_CARD.png",            -1},
-    //{UISTR_MENU_GLOGCOUNT,      UIMENU_HASVALUE,    "USED_GLOG.png",            -1},
-    //{UISTR_MENU_MLOGCOUNT,      UIMENU_HASVALUE,    "USED_MLOG.png",            -1},
-    //{UISTR_MENU_USEDMEMORY,     UIMENU_HASVALUE,    "USED_MEMORY.png",          -1},
-    //{UISTR_MENU_FREESPACES,   UIMENU_POPUP,       "FREESPACES.png",           -1},
-    {UISTR_MENU_DEVICEINFO,     UIMENU_POPUP,       "DEVICEINFO.png",           -1},
 
-
-    {-1,                        UIMENU_TITLE,       NULL,                       -1}
+    {-1,                            UIMENU_TITLE,       NULL,                       -1}
 };
 
 //声明存放标题数组
@@ -112,7 +405,7 @@ int g_uiMenuItemIndex = 1;//标题项目索引
 int g_uiMenuTopIndex = 1;//标题项目顶端位置标志
 int g_uiPopupTitle = -1;//
 
-extern DWORD	g_uiTimeLastAction;//记录前一次操作的时间
+//DWORD	g_uiTimeLastAction=0;//记录前一次操作的时间
 
 
 //函数作用就是将g_uiMenuItemsSrc数组复制到g_uiMenuItems中，可以排除其中不用的标题索引
@@ -191,7 +484,10 @@ int uiProcMenuGetItemCount(int nTitle)
 
     return nCount;
 }
+
 //获取Item下面子菜单的对应显示值
+//CMenu::drawReportStyle()函数调用
+//获取对应的item类型为：：item->nType == UIMENU_HASVALUE
 QString uiProcMenuGetItemValue(int nItemStr)
 {
     DWORD dwValue = 0;
@@ -202,10 +498,22 @@ QString uiProcMenuGetItemValue(int nItemStr)
     switch (nItemStr)
     {
         case UISTR_MENU_USERENROLLCOUNT:
-            str = QString("%1 / %3%4").arg(1000).arg(5000).arg("ywm");
+            str = QString("%1 / %3%4").arg(1000).arg(5000).arg("xxx");
             break;
         case UISTR_MENU_FPENROLLCOUNT:
             str = QString("%1 / %3%4").arg(200).arg(5000).arg("xxx");
+            break;
+        case UISTR_MENU_PWDENROLLCOUNT:
+            str = QString("%1 / %3%4").arg(300).arg(5000).arg("xxx");
+            break;
+        case UISTR_MENU_GLOGCOUNT:
+            str = QString("%1 / %3%4").arg(400).arg(5000).arg("xxx");
+            break;
+        case UISTR_MENU_MLOGCOUNT:
+            str = QString("%1 / %3%4").arg(500).arg(5000).arg("xxx");
+            break;
+        case UISTR_MENU_SETTIME:
+            str = QString("%1:%3:%5").arg(12).arg(34).arg(45);
             break;
         default:
             break;
@@ -218,6 +526,59 @@ QString uiProcMenuGetItemValue(int nItemStr)
 }
 
 
+//处理 CMenu::OnKeyPressOk 函数下面的 item->nType == UIMENU_HASVALUE选项的处理
+//对应的item类型为：：item->nType == UIMENU_HASVALUE
+BOOL uiProcMenuHasValue(QWidget *pWnd, int nItemStr)
+{
+    BOOL bResult;
+    int nValue, nValue1;
+    int x, y, w, h;
+    char *szValue;
+    //g_uiMenuRedrawFlag = FALSE;
+    x = g_uiMenuCurrentArea.x();
+    y = g_uiMenuCurrentArea.y();
+    w = g_uiMenuCurrentArea.width();
+    h = g_uiMenuCurrentArea.height();
+
+    switch (nItemStr)
+    {
+        case UISTR_MENU_SETTIME:
+            nValue = uiProcBoxTime(pWnd, x, y, w, h, &bResult, /*uiRtcGetSeconds()*/9);
+            if (bResult)
+            {
+                //uiRtcSetTime(nValue);
+                qDebug() << "nValue=="<<nValue;
+                //uiLogSlogAdd(g_uiProcStatus.nIDCurrentMgr, SLOG_SETTIME, 0, 2);
+            }
+            break;
+        default:
+            break;
+    }
+    //g_uiMenuRedrawFlag = TRUE;
+    return TRUE;
+}
+
+//处理 CMenu::OnKeyPressOk 函数下面的 item->nType == UIMENU_CUSTOM选项的处理
+//对应的item类型为：：item->nType == UIMENU_CUSTOM
+BOOL uiProcMenuCustom(QWidget* /*pWnd*/, int nItemStr)
+{
+    BOOL bResult;
+    switch (nItemStr)
+    {
+        case UISTR_MENU_ENROLLNEWFP:
+        case UISTR_MENU_ENROLLNEWPWD:
+            //uiProcEnroll(&g_UserInfoTemp,nItemStr);
+            qDebug() << "UISTR_MENU_ENROLLNEWPWD";
+            DIALOGBOX(CEnrollStep1);
+
+
+
+            break;
+
+    }
+
+    return TRUE;
+}
 
 //menu的初始化设置
 void MenuSettingStart(BOOL bFirst = FALSE)
@@ -235,7 +596,7 @@ CMenu::CMenu(QWidget *parent /* = NULL */)
 {
     m_bTerminateFlag = FALSE;
     g_uiTimeLastAction = GetMainTickCount();
-    uiProcBuildMenu();
+    //uiProcBuildMenu();
     //this->MenuProc(UISTR_MENU_MAINMENU);
 
 }
@@ -253,11 +614,11 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
     g_uiMenuItemTitle = nPopupMenuTitle;//设置title位置
     g_uiMenuItemIndex = uiProcMenuTitleIndex(nPopupMenuTitle) + 1;//取title下面第一个Index
     g_uiMenuTopIndex = g_uiMenuItemIndex;//设置title下面第一个为top索引
-    //qDebug() << "nPopupMenuTitle=="<<nPopupMenuTitle;
-    //qDebug() << "g_uiMenuItemTitle=="<<g_uiMenuItemTitle;
-    //qDebug() << "uiProcMenuTitleIndex(nPopupMenuTitle)+1=="<<uiProcMenuTitleIndex(nPopupMenuTitle);
-    //qDebug() << "g_uiMenuItemIndex=="<<g_uiMenuItemIndex;
-    //qDebug() << "g_uiMenuTopIndex=="<<g_uiMenuTopIndex;
+    qDebug() << "nPopupMenuTitle=="<<nPopupMenuTitle;
+    qDebug() << "g_uiMenuItemTitle=="<<g_uiMenuItemTitle;
+    qDebug() << "uiProcMenuTitleIndex(nPopupMenuTitle)+1=="<<uiProcMenuTitleIndex(nPopupMenuTitle);
+    qDebug() << "g_uiMenuItemIndex=="<<g_uiMenuItemIndex;
+    qDebug() << "g_uiMenuTopIndex=="<<g_uiMenuTopIndex;
 
     OnRedraw();
 
@@ -267,11 +628,11 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
         //QApplication::processEvents();
         POST_EVENTS();
 
-
+        //g_uiBuildMenu = TRUE;
         if(g_uiBuildMenu && nPopupMenuTitle == UISTR_MENU_MAINMENU)
         {
             g_uiBuildMenu = FALSE;
-            //qDebug() << "xxx";
+            qDebug() << "xxx";
             uiProcBuildMenu();
             goto _lstart;
         }
@@ -298,7 +659,7 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
             break;
         case UIKEY_1://UIKEY_ESC
             qDebug() << "keycode==esc"<<1;
-            goto _ExitWithoutSave;
+            goto _Exit;
             break;
         case 2:
             qDebug() << "keycode==right"<<2;
@@ -307,14 +668,14 @@ void CMenu::MenuProc(int nPopupMenuTitle /* = -1 */)
             break;
         }
     }
-    if(uiTimeIsTimeout(60000))
-    {
-        goto _ExitWithoutSave;
-    }
-
+    //if(uiTimeIsTimeout(60000))
+    //{
+       //goto _ExitWithoutSave;
+    //}
+_Exit:
     MenuSettingEnd(nPopupMenuTitle);
     GUI_DLG_SET_THEME();
-    //update();
+    update();
 
 _ExitWithoutSave:
 
@@ -325,17 +686,17 @@ void CMenu::OnRedraw()
 {
     int nTitleIndex = uiProcMenuTitleIndex(g_uiMenuItemTitle);
 
-    if(g_uiMenuItemTitle == UISTR_MENU_SYSINFOVIEW)
+/*    if(g_uiMenuItemTitle == UISTR_MENU_SYSINFOVIEW)
     {
-/*        setTitle(QString(RESOURCE_PATH) + QString(g_uiMenuItems[g_uiMenuItemIndex].szIconFile),
+        setTitle(QString(RESOURCE_PATH) + QString(g_uiMenuItems[g_uiMenuItemIndex].szIconFile),
                 UISTR(UISTR_SYMBOL_BRACKET_ON) +
                 UISTR(g_uiMenuItemTitle) +
                 UISTR(UISTR_SYMBOL_BRACKET_OFF));
         uiLcdSetLabelText(ui.lblTitleText1, UISTR(UISTR_UNIT_TOTAL), TITLECOLOR);
         ui.lblTitleText1->show();
-*/   }
+    }
      else
-     {
+ */   {
         //this->lblTitleText1->hide();
         setTitle(QString(RESOURCE_PATH) + QString(g_uiMenuItems[g_uiMenuItemIndex].szIconFile),
                 /*UISTR(UISTR_SYMBOL_BRACKET_ON) +*/ QString("[")
@@ -346,13 +707,15 @@ void CMenu::OnRedraw()
       if ((int)(g_uiMenuItems[nTitleIndex].szIconFile) == UIMENU_ICON)//
       {
           //预留显示信息
-          uiLcdSetLabelText(ui->lblStatusText, QString("I love ywm!")/*UISTR("Click it")*/, FOREGROUND_COLOR0);
+          //uiLcdSetLabelText(ui->lblStatusText, QString("I love ywm!")/*UISTR("Click it")*/, FOREGROUND_COLOR0);
+          uiLcdSetLabelText(ui->lblStatusText,UISTR(g_uiMenuItems[g_uiMenuItemIndex].nMenuStr), FOREGROUND_COLOR1);
 
       }
       else
       {
           //同上
-          uiLcdSetLabelText(ui->lblStatusText, QString("I love world!")/*UISTR(UISTR_MENU_USERMANAGE)*/, FOREGROUND_COLOR1);
+          //uiLcdSetLabelText(ui->lblStatusText, QString("I love world!")/*UISTR(UISTR_MENU_USERMANAGE)*/, FOREGROUND_COLOR1);
+          uiLcdSetLabelText(ui->lblStatusText,UISTR(g_uiMenuItems[g_uiMenuItemIndex].nMenuStr), FOREGROUND_COLOR1);
       }
       update();
 }
@@ -528,11 +891,11 @@ void CMenu::drawReportStyle(QPainter *painter, int nCurrentIndex, int from, int 
             }
             if(nCurrentIndex == i)
             {
-                    painter->setFont(SB_FONT_12());
+                    //painter->setFont(SB_FONT_12());
                     uiLcdDrawText(painter, x + MENU_REPORT_LEFTMARGIN, y, w-x, h, Qt::AlignTop | Qt::AlignLeft, UISTR(item->nMenuStr), MENU_ITEM_SELET_COLOR);
                     if(item->nType == UIMENU_HASVALUE)
                         uiLcdDrawText(painter, x, y, w-x, h, Qt::AlignBottom | Qt::AlignRight, uiProcMenuGetItemValue(item->nMenuStr), MENU_ITEM_SELET_COLOR);
-                    painter->setFont(SB_FONT_13());
+                    //painter->setFont(SB_FONT_13());
             }
             else
             {
@@ -540,7 +903,7 @@ void CMenu::drawReportStyle(QPainter *painter, int nCurrentIndex, int from, int 
                     if(item->nType == UIMENU_HASVALUE)
                         uiLcdDrawText(painter, x, y, w-x, h, Qt::AlignBottom | Qt::AlignRight, uiProcMenuGetItemValue(item->nMenuStr), MENU_PEN_COLOR);
             }
-
+            //如果列表下面type类型为UIMENU_POPUP则其有子菜单，小箭头表示
             if (item->nType == UIMENU_POPUP || item->nType == UIMENU_CUSTOM_HASCHILD)
             {
                     QImage pmap_more(__RIGHT_ARROW);
@@ -618,46 +981,9 @@ void CMenu::OnKeyPressOk(int nTitle)
             __prev_col_cnt = __MENU_ICON_COL_CNT;
             __prev_item_size = __MENU_ICON_ITEM_SIZE;
 
-            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_SYSTEMSETTING)
-            {
-                __MENU_ICON_COL_CNT = 3;
-                __MENU_ICON_ITEM_SIZE = 68;
-            }
-/*            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ENROLLNEW)
-            {
-                    BOOL bResult;
-                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
-                    bzero(&gUserInfoTemp, sizeof(USER_INFO));
-                    DbUserInfoFlagManagerSet(&gUserInfoTemp, PRIV_USER);
-                    bResult = (BOOL)DIALOGBOXEX(CInputUserIDName, CInputUserIDName::ID_ALL);
-                    goto _lPopupExit;
-            }
-            if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ENROLLDELETE)
-            {
-                    if (!Db_GetUserCount())
-                    {
-                            uiLcdMessageBox(UI_MSG_ERROR, UISTR_ENROLLDELETE_NODATA, UI_MSGTIMEOUT);
-                            break;
-                    }
-                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
-                    bzero(&gUserInfoTemp, sizeof(USER_INFO));
-                    gUserInfoTemp.ID = DIALOGBOX_RET(CInputUserID);
-                    goto _lPopupExit;
-            }
-            if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_USERTIMEZONE) ||
-                    (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_DURESS_MANAGE))
-            {
-                    if (!Db_GetUserCount())
-                    {
-                            uiLcdMessageBox(UI_MSG_ERROR, UISTR_ENROLLDELETE_NODATA, UI_MSGTIMEOUT);
-                            break;
-                    }
-                    g_uiPopupTitle = g_uiMenuItems[nCurrentIndex].nMenuStr;
-                    g_uiMenuIDForUerTZ = (UINT64)DIALOGBOX_RET(CInputUserID);
-                    goto _lPopupExit;
-            }
-            uiSoundOut(SOUND_MENUSELECT, UI_BUZZER_NONE);
-*/
+            //uiSoundOut(SOUND_MENUSELECT, UI_BUZZER_NONE);
+
+            qDebug() << "OnKeyPressOk::UIMENU_POPUP";
             MenuProc(g_uiMenuItems[nCurrentIndex].nMenuStr);
 
 _lPopupExit:
@@ -668,21 +994,23 @@ _lPopupExit:
             __MENU_ICON_ITEM_SIZE = __prev_item_size;
             g_uiPopupTitle = -1;
             OnRedraw();
-            qDebug() << "OnKeyPressOk::UIMENU_POPUP";
+            qDebug() << "OnKeyPressOk::UIMENU_POPUP is over!!";
             break;
     case UIMENU_HASVALUE:
-            //uiProcMenuHasValue(ui.lblBackgroundFrame, g_uiMenuItems[nCurrentIndex].nMenuStr);
-            //GUI_DLG_SET_THEME();
-            //OnRedraw();
+            uiProcMenuHasValue(ui->lblBackgroundFrame, g_uiMenuItems[nCurrentIndex].nMenuStr);
+            GUI_DLG_SET_THEME();
+            OnRedraw();
+            qDebug() << "OnKeyPressOk::UIMENU_HASVALUE";
             break;
     case UIMENU_CUSTOM:
     case UIMENU_CUSTOM_HASCHILD:
-            //uiProcMenuCustom(this, g_uiMenuItems[nCurrentIndex].nMenuStr);
+            uiProcMenuCustom(this, g_uiMenuItems[nCurrentIndex].nMenuStr);
             //if (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ADVANCEDSETTING_DEFAULT)
             //{
-                    //GUI_DLG_SET_THEME();
+                GUI_DLG_SET_THEME();
             //}
-            //OnRedraw();
+            OnRedraw();
+            qDebug() << "OnKeyPressOk::UIMENU_CUSTOM";
             break;
     }
 
@@ -716,7 +1044,7 @@ void CMenu::OnKeyPressArrow(int nKey, int nTitle)
             }
             else*/
             g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt - 1) % nItemCnt;
-            qDebug() << "g_uiMenuItemIndex111=="<<g_uiMenuItemIndex;
+            qDebug() << "CMenu::OnKeyPressArrow::g_uiMenuItemIndex111=="<<g_uiMenuItemIndex;
             break;
     case UIKEY_DOWN:
             /*if ((g_uiMenuItems[nFirstIndex-1].nMenuStr == UISTR_MENU_ENROLLNEW) ||
@@ -729,10 +1057,11 @@ void CMenu::OnKeyPressArrow(int nKey, int nTitle)
             }
             else*/
             g_uiMenuItemIndex = nFirstIndex + (g_uiMenuItemIndex - nFirstIndex + nItemCnt + 1) % nItemCnt;
-            qDebug() << "g_uiMenuItemIndex222=="<<g_uiMenuItemIndex;
+            qDebug() << "CMenu::OnKeyPressArrow::g_uiMenuItemIndex222=="<<g_uiMenuItemIndex;
             break;
     }
     qDebug() << "bReport111=="<<bReport;
+    //翻页设置
     if (bReport)
     {
             if (g_uiMenuItemIndex < g_uiMenuTopIndex)

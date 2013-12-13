@@ -2,7 +2,7 @@
 #define CMAINFRAME_H
 
 #include <QDialog>
-#include "Define.h"
+//#include "Define.h"
 //#include <QPixmap>
 
 class QPixmap;

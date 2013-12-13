@@ -1,25 +1,30 @@
 <RCC>
     <qresource prefix="/images">
-        <file>res/USBMANAGE.png</file>
-        <file>res/SYSTEMSETTING.png</file>
-        <file>res/SYSINFOVIEW.png</file>
-        <file>res/DATAVIEW.png</file>
+        <file>res/USERINFOUP.png</file>
+        <file>res/USERENROLLCOUNT.png</file>
+        <file>res/USERDATAVIEW.png</file>
+        <file>res/USBMANAGER.png</file>
+        <file>res/title-2.png</file>
+        <file>res/SETTIME.png</file>
         <file>res/selected-item.png</file>
-        <file>res/bg-main2.png</file>
+        <file>res/PWDENROLLCOUNT.png</file>
+        <file>res/OTHERINFO.png</file>
         <file>res/num.png</file>
+        <file>res/MLOGCOUNT.png</file>
+        <file>res/MESSINFO1.png</file>
         <file>res/menu.png</file>
+        <file>res/MANAGER.png</file>
+        <file>res/GLOGCOUNT.png</file>
+        <file>res/FPENROLLCOUNT.png</file>
+        <file>res/ENROLLNEWPWD.png</file>
+        <file>res/ENROLLNEWFP.png</file>
+        <file>res/DEVICEINFO.png</file>
+        <file>res/bg-main2.png</file>
+        <file>res/bg-main1.png</file>
         <file>res/bg.png</file>
         <file>res/backgroup.png</file>
-        <file>res/bg-menu.png</file>
-        <file>res/title-2.png</file>
-        <file>res/bg-main1.png</file>
-        <file>res/USERMANAGE.png</file>
-        <file>res/FP.png</file>
-        <file>res/USED_USERS.png</file>
-        <file>res/USED_FP.png</file>
-        <file>res/ENROLLNEW.png</file>
-        <file>res/ENROLLEDIT.png</file>
-        <file>res/ENROLLDEL.png</file>
-        <file>res/DEVICEINFO.png</file>
+        <file>res/ALLUSERINFODOWN.png</file>
+        <file>res/ALLMANAGERGLOGLODA.png</file>
+        <file>res/ALLGLOGLOAD.png</file>
     </qresource>
 </RCC>

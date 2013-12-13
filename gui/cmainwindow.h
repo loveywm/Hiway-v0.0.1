@@ -3,8 +3,9 @@
 
 #include <QWidget>
 
-#include "Define.h"
+//#include "Define.h"
 #include "ui_cmainwindow.h"
+typedef unsigned char               BOOL;
 
 namespace Ui {
     class CMainWindow;

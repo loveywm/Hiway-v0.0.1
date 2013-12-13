@@ -1,4 +1,4 @@
-#include "uiglobal.h"
+//#include "uiglobal.h"
 #include <QPainter>
 #include <QtGui/QLineEdit>
 #include <QtGui/QComboBox>
@@ -8,8 +8,8 @@
 //#include <time.h>
 #include <sys/time.h>
 #include "Define.h"
-DWORD		g_uiTimeLastAction = 0;
-BOOL            g_uiBuildMenu = FALSE;
+
+extern DWORD  g_uiTimeLastAction;
 
 //////////////////////////////////////////////////////////////////////////
 void uiLcdSetLabelText(QLabel *pLabel, QString str, QColor color,QColor edge_color /*= FOREGROUND_COLOR1*/ ,QString strName /*= QString("")*/)
@@ -44,7 +44,7 @@ void uiLcdSetLabelText(QLabel *pLabel, QString str, QColor color,QColor edge_col
     painter.drawText(x, y, w, h, align, str);
     if(strName.length())
     {
-        //painter.setFont(SB_FONT_4());
+        painter.setFont(SB_FONT_12());
         painter.drawText(x+painter.fontMetrics().width(str)+10,y,w,h,align,strName);
     }
     pLabel->setPixmap(pmap);
@@ -89,6 +89,11 @@ int GetMainTickCount(void)
     return ((tv.tv_sec - __start_time) * 1000 + tv.tv_usec / 1000);//秒数*1000+微秒/1000就全部转换为毫秒
 }
 
+void uiTimeSetLastActionTime(void)
+{
+    g_uiTimeLastAction = GetMainTickCount();
+}
+
 DWORD uiTimeGetIdleTime(void)
 {
     return GetMainTickCount() - g_uiTimeLastAction;
@@ -102,6 +107,8 @@ BOOL uiTimeIsTimeout(DWORD dwTimeout)
     //qDebug() <<"bRet==" << bRet;
     return bRet;
 }
+
+//////////////////////////////////////////////////////////
 
 void SET_DLG_ITEM_COLOR(QWidget *w,int colorFlag /*= 0*/)
 {

@@ -3,7 +3,7 @@
 
 //#include <QPixmap>
 #include <QDebug>
-#include "uiglobal.h"
+#include "Define.h"
 
 CMainFrame::CMainFrame(QWidget *parent) :
     QDialog(parent),
