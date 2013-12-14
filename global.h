@@ -82,6 +82,9 @@ typedef unsigned long			LPARAM;
 #define INVALID_HANDLE_VALUE	(-1)
 #endif /*INVALID_HANDLE_VALUE*/
 
+
+#define FUCK   1
+
 //////////////////////////////////////////////////////////////////////////
 #define MAX(_a_, _b_)			((_a_) > (_b_) ? (_a_) : (_b_))
 #define MIN(_a_, _b_)			((_a_) < (_b_) ? (_a_) : (_b_))

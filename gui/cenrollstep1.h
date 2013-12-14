@@ -2,6 +2,7 @@
 #define CENROLLSTEP1_H
 
 #include <QDialog>
+#include <QKeyEvent>
 
 
 //typedef unsigned char			BYTE, u8, uchar;
@@ -23,7 +24,7 @@ public:
     enum {ID_ALL, ID_NEW, ID_BACKUP};
     CEnrollStep1(QWidget *parent = NULL, UINT64 nID = 0, BOOL bNew = TRUE,BOOL bEdit = FALSE);
     ~CEnrollStep1();
-    //BOOL EnrollParamSet(int nCandidateDiff = 1);
+    BOOL EnrollParamSet(int nCandidateDiff = 1);
     //BOOL EnrollCheck(BOOL bIDChange = FALSE);
     //BOOL EnrollUserInfo();
     int DoProcess(int nEdit = 0);
@@ -33,11 +34,13 @@ public Q_SLOTS:
     void OnFocusChanged(QWidget *from, QWidget *to);
     //void OnIDChange(const QString & szID);
     //void OnPasswordChange(const QString & szPassword);
-    //BOOL OnBtnOK();
+    BOOL OnBtnOK();
     BOOL OnBtnESC();
 
 protected:
     //bool event(QEvent *e);
+    //位了pc端模拟测试
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     BOOL m_bTerminateFlag;

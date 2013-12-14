@@ -14,6 +14,63 @@ static int __DB_BACKUPREAD_SETUP_STAT = SETUPREAD_SUCCESS;
 static BOOL __DB_FIST_LOAD = TRUE;
 static BOOL SetupTotaldataDefault_flag=0;
 
+
+BOOL _Db_FlashRead(int fd, void* pDst, int from, int to, int nSizeof, BYTE byEmpty, char */*szTitle*/, int *pResult/* = NULL*/, int nBaseAddr/* = 0*/)
+{
+        int i;
+        int pos;
+        BYTE *buf = (BYTE*)pDst;
+        int result = 0;
+        int nPercentBase = 0;
+        int nPercent, nPrevPercent = 0;
+
+        //uiLcdProgressStart(UISTR_FILEREAD);
+        /*
+        if (__DB_FIST_LOAD)
+        {
+                if(__flashread_type == FLASHREAD_USERINFO)
+                        nPercentBase = 15;//userinfo
+                else if(__flashread_type == FLASHREAD_SLOG)
+                        nPercentBase = 20;//mlog
+                else if(__flashread_type == FLASHREAD_GLOG)
+                        nPercentBase = 25;//glog
+        }
+        */
+        for (i=from; i<to; i++)
+        {
+                pos = i * nSizeof;
+                result = pread(fd, buf, (size_t)nSizeof, (off_t)(nBaseAddr + pos));
+
+                if (result == 0) //EOF
+                {
+                        i++;
+                        break;
+                }
+                else if (result == -1) //ERROR
+                        memset(buf, byEmpty, nSizeof);
+                /*
+                nPercent = nPercentBase + LCDPROG_PERCENT(i-from, to-from) * (__DB_FIST_LOAD ? 0.05 : 0);
+                if (nPercent != nPrevPercent)
+                {
+                        if (__DB_FIST_LOAD)
+                                uiLcdProgress1(nPercent);
+                        else
+                                uiLcdProgress(nPercent);
+                        nPrevPercent = nPercent;
+                }
+                */
+                buf += nSizeof;
+        }
+
+        //uiLcdProgressEnd();
+
+        if (pResult)
+                *pResult = i - from;
+        return (i == to) || (result == 0);
+}
+
+
+
 int DbBackupLicenseRead(BYTE *pby)
 {
         int i;
@@ -158,6 +215,9 @@ BOOL DbLicenseRead(void)
         if ((dwCheckSum == *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS))
         {
                 DbBackupLicenseWrite(pby);
+#if FUCK
+                qDebug() << "DbLicenseRead::DbBackupLicenseWrite(pby);";
+#endif
         }
         else if ((dwCheckSum != *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS))
         {
@@ -176,6 +236,9 @@ BOOL DbLicenseRead(void)
         {
                 if (memcmp(pby, pbyBackup, FLASH_LICENSE_SIZE))
                         DbBackupLicenseWrite(pby);
+#if FUCK
+                qDebug() << "DbLicenseRead::(dwCheckSum == *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS)";
+#endif
         }
 
         if (dwCheckSum != *(DWORD*)pby || SetupTotaldataDefault_flag) //To Default, in case of License & LicenseBackup damaged or first booting !
@@ -231,33 +294,10 @@ BOOL DbLicenseRead(void)
         else
         {
                 memcpy(&dbLicense, pby, sizeof(DBLICENSE));
-
-// 		if (dbLicense.nMaxEnrollCount != (int)gFpMaximum)
-// 			dwCheckSum++;
+#if FUCK
+                qDebug() << "DbLicenseRead::memcpy(&dbLicense, pby, sizeof(DBLICENSE))";
+#endif
         }
-
-
-
-// 	printf("dbLicense.bUseEthernet        = %d\r\n", dbLicense.bUseEthernet);
-// 	printf("dbLicense.bUseUSB             = %d\r\n", dbLicense.bUseUSB);
-// 	printf("dbLicense.bUseCard            = %d\r\n", dbLicense.bUseCard);
-// 	printf("dbLicense.bUsePOE             = %d\r\n", dbLicense.bUsePOE);
-// 	printf("dbLicense.bUseWebServer       = %d\r\n", dbLicense.bUseWebServer);
-// 	printf("dbLicense.bUseRS232           = %d\r\n", dbLicense.bUseRS232);
-// 	printf("dbLicense.bUseMP3             = %d\r\n", dbLicense.bUseMP3);
-// 	printf("dbLicense.bUseWiegand         = %d\r\n", dbLicense.bUseWiegand);
-// 	printf("dbLicense.bUseAlarmFunction   = %d\r\n", dbLicense.bUseAlarmFunction);
-// 	printf("dbLicense.bLockControl        = %d\r\n", dbLicense.bLockControl);
-// 	printf("dbLicense.nMaxEnrollCount     = %d\r\n", dbLicense.nMaxEnrollCount);
-// 	printf("dbLicense.pFlashStartUserInfo = %p\r\n", dbLicense.pFlashStartUserInfo);
-// 	printf("dbLicense.pFlashStartFP       = %p\r\n", dbLicense.pFlashStartFP);
-// 	printf("dbLicense.dwFlashSizeFP       = %p\r\n", dbLicense.dwFlashSizeFP);
-// 	printf("dbLicense.pFlashStartSLOG     = %p\r\n", dbLicense.pFlashStartSlog);
-// 	printf("dbLicense.dwFlashSizeSLOG     = %p\r\n", dbLicense.dwFlashSizeSlog);
-// 	printf("dbLicense.nSlogMaxCount       = %d\r\n", dbLicense.nSlogMaxCount);
-// 	printf("dbLicense.pFlashStartGLOG     = %p\r\n", dbLicense.pFlashStartGlog);
-// 	printf("dbLicense.dwFlashSizeGLOG     = %p\r\n", dbLicense.dwFlashSizeGlog);
-// 	printf("dbLicense.nGlogMaxCount       = %d\r\n", dbLicense.nGlogMaxCount);
 
 _lExit:
         FREE(pby);
@@ -355,7 +395,7 @@ BOOL DbSetupTotalRead(BOOL bBackupCheck /*= TRUE*/)
     if((dwCheckSum == *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS))
     {
         DbBackupSetupWrite(pby);
-        qDebug() << "(dwCheckSum == *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS)";
+        qDebug() << "DbSetupTotalRead::(dwCheckSum == *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS)";
     }
     //如果检测错误，备份正确,那将备份写入运行的
     else if ((dwCheckSum != *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS))
@@ -373,18 +413,18 @@ BOOL DbSetupTotalRead(BOOL bBackupCheck /*= TRUE*/)
                 dwCheckSum += *pdw;
             }
          }
-        qDebug() << "(dwCheckSum != *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS)";
+        qDebug() << "DbSetupTotalRead::(dwCheckSum != *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS)";
     }
     //都正常运行
     else if((dwCheckSum == *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS))
     {
         if (memcmp(pby, pbyBackup, FLASH_SETUP_SIZE))
             DbBackupSetupWrite(pby);
-        qDebug() << "(dwCheckSum == *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS)";
+        qDebug() << "(DbSetupTotalRead::dwCheckSum == *(DWORD*)pby) && (nBackupStatus == SETUPREAD_SUCCESS)";
     }
     else
     {
-        qDebug() << "(dwCheckSum != *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS)";
+        qDebug() << "DbSetupTotalRead::(dwCheckSum != *(DWORD*)pby) && (nBackupStatus != SETUPREAD_SUCCESS)";
     }
     //默认情况下设置的参数
     if (!bRet || (dwCheckSum != *(DWORD*)pby) || SetupTotaldataDefault_flag)//To Default
@@ -408,13 +448,13 @@ BOOL DbSetupTotalRead(BOOL bBackupCheck /*= TRUE*/)
         DbBackupSetupWrite(pby);
         bRet = FALSE;
 
-        qDebug() << "SetupTotaldataDefault_flag";
+        qDebug() << "DbSetupTotalRead::SetupTotaldataDefault_flag";
 
     }
     else
     {
         memcpy(&dbSetupTotal, pby, sizeof(DBSETUP_TOTAL));
-        qDebug() << "SetupTotaldataDefault_flag1111111111111";
+        qDebug() << "DbSetupTotalRead::SetupTotaldataDefault_flag1111111111111";
     }
 
 _lExit:
@@ -478,17 +518,17 @@ BOOL DbUserInfoLoad(void)
         if (fd == INVALID_HANDLE_VALUE)
                 return FALSE;
 
-        //gpUserInfoEnrollData = (USER_INFO*)malloc(sizeof(USER_INFO) * dbLicense.nMaxEnrollCount);
-        gpUserInfoEnrollData = (USER_INFO*)malloc(sizeof(USER_INFO) * 100);
+        gpUserInfoEnrollData = (USER_INFO*)malloc(sizeof(USER_INFO) * dbLicense.nMaxEnrollCount);
+        //gpUserInfoEnrollData = (USER_INFO*)malloc(sizeof(USER_INFO) * 100);
         if (gpUserInfoEnrollData == NULL)
         {
                 bRet = FALSE;
                 goto _lExit;
         }
 
-        //memset(gpUserInfoEnrollData, 0, sizeof(USER_INFO) * dbLicense.nMaxEnrollCount);
-        memset(gpUserInfoEnrollData, 0, sizeof(USER_INFO) * 100);
-        //bRet = _Db_FlashRead(fd, gpUserInfoEnrollData, 0, dbLicense.nMaxEnrollCount, sizeof(USER_INFO), 0, NULL);
+        memset(gpUserInfoEnrollData, 0, sizeof(USER_INFO) * dbLicense.nMaxEnrollCount);
+        //memset(gpUserInfoEnrollData, 0, sizeof(USER_INFO) * 100);
+        bRet = _Db_FlashRead(fd, gpUserInfoEnrollData, 0, dbLicense.nMaxEnrollCount, sizeof(USER_INFO), 0, NULL);
 
 _lExit:
         FD_CLOSE(fd);
@@ -511,7 +551,7 @@ BOOL Db_LoadAllData(BOOL bSetupReadStatus)
     //__flashread_type = FLASHREAD_USERINFO;
     bRet2 = DbUserInfoLoad();
     bRet=bRet && bRet2;
-    printf("UserInfoLoad: %d\r\n", bRet2);
+    qDebug("Db_LoadAllData::UserInfoLoad:%d\r\n", bRet2);
 
 /*	__flashread_type = FLASHREAD_USERINFO;
         bRet2 = DbUserTimeLoad(); bRet=bRet && bRet2; //printf("UserInfoLoad: %d\r\n", bRet2);

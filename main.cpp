@@ -60,7 +60,7 @@ BOOL HIWAY_LOAD(void)
 {
     if(HIWAY_INIT0() != DEVERR_SUCCESS)
     {
-        qDebug() << "HIWAY_INIT0 error!";
+        qDebug() << "HIWAY_LOAD::HIWAY_INIT0 error!";
     }
 
     //读取totle setup 系统运行使用的数据
@@ -70,7 +70,7 @@ BOOL HIWAY_LOAD(void)
     //加载用户数据，考勤数据等
     if (!Db_LoadAllData(bRet))
     {
-        qDebug() << "Db_LoadAllData(bRet) error!";
+        qDebug() << "HIWAY_LOAD::Db_LoadAllData(bRet) error!";
         return FALSE;
     }
 

@@ -15,7 +15,7 @@ typedef unsigned long long		UINT64, u64;
 
 #define TRUE					(1)
 #define FALSE					(0)
-
+#define NULL					(0)
 
 //////////////////////////////////////////////////////////////////////////
 #define FLASH_SECTOR_SIZE		0x4000
@@ -33,20 +33,20 @@ typedef unsigned long long		UINT64, u64;
 #define FLASH_SETUP_FILENAME            (ENROLLDATA_MOUNTPOINT "/SETUP.set")
 #define FLASH_SETUP_BACKUP		(ENROLLDATA_MOUNTPOINT "/SETUP-bak.set")
 #define FLASH_UI_INDEX_SIZE		( FLASH_SECTOR_SIZE * 2 )
-#define FLASH_UI_INDEX_FILENAME	(ENROLLDATA_MOUNTPOINT "/UI_INDEX.dat")
+#define FLASH_UI_INDEX_FILENAME         (ENROLLDATA_MOUNTPOINT "/UI_INDEX.dat")
 //#define FLASH_FP_INDEX_SIZE		( FLASH_SECTOR_SIZE )
-#define FLASH_FP_INDEX_FILENAME	(ENROLLDATA_MOUNTPOINT "/FP_INDEX.dat")
+#define FLASH_FP_INDEX_FILENAME         (ENROLLDATA_MOUNTPOINT "/FP_INDEX.dat")
 #define FLASH_ANTIPASS_SIZE		( FLASH_SECTOR_SIZE )
-#define FLASH_ANTIPASS_FILENAME	(ENROLLDATA_MOUNTPOINT "/ANTIPASS.dat")
+#define FLASH_ANTIPASS_FILENAME         (ENROLLDATA_MOUNTPOINT "/ANTIPASS.dat")
 
-#define FLASH_USERINFO_FILENAME	(ENROLLDATA_MOUNTPOINT "/USERINFO.dat")
+#define FLASH_USERINFO_FILENAME         (ENROLLDATA_MOUNTPOINT "/USERINFO.dat")
 #define FLASH_FP_FILENAME		(ENROLLDATA_MOUNTPOINT "/FP.dat")
 #define FLASH_SLOG_FILENAME		(ENROLLDATA_MOUNTPOINT "/SLOG.dat")
 #define FLASH_GLOG_FILENAME		(ENROLLDATA_MOUNTPOINT "/GLOG.dat")
 #define FLASH_PART_FILENAME		(ENROLLDATA_MOUNTPOINT "/part.txt")
-#define FLASH_USERTIME_FILENAME	(ENROLLDATA_MOUNTPOINT "/USERTIME.dat")
+#define FLASH_USERTIME_FILENAME         (ENROLLDATA_MOUNTPOINT "/USERTIME.dat")
 #define FLASH_IDHEADLIST_FILENAME	(ENROLLDATA_MOUNTPOINT "/IdHeadList.dat")
-#define FLASH_FPUPLOAD_FILENAME	(ENROLLDATA_MOUNTPOINT "/fpupload.dat")
+#define FLASH_FPUPLOAD_FILENAME         (ENROLLDATA_MOUNTPOINT "/fpupload.dat")
 
 #define MAX_USER_COUNT			5000   //5000-10000
 #define MAX_SLOG_COUNT			5000
@@ -57,13 +57,13 @@ typedef unsigned long long		UINT64, u64;
 #define     USERNAME_LENGTH     12
 
 typedef struct {
-        DWORD	mENROLL		: 24;		// (2bit(used_bit, duress_bit) per FP*10, PWD, CARD)
-        DWORD	byUseGroupTZ: 1;		// use group's timezone
-        DWORD	byUseGroupVM: 1;		// use group's verify mode
-        DWORD	byPhotoExist: 1;		// 1 && sdcard exist => photo exist
-        DWORD	byVoiceExist: 1;		// 1 && sdcard exist => voice exist
-        DWORD	byMgr		: 3;		// privilege, 001:User, 110:Manager, 111:SManager
-        DWORD	bEnable		: 1;		// enable/disable flag
+        DWORD	mENROLL		:24;		// (2bit(used_bit, duress_bit) per FP*10, PWD, CARD)
+        DWORD	byUseGroupTZ    :1;		// use group's timezone
+        DWORD	byUseGroupVM    :1;		// use group's verify mode
+        DWORD	byPhotoExist    :1;		// 1 && sdcard exist => photo exist
+        DWORD	byVoiceExist    :1;		// 1 && sdcard exist => voice exist
+        DWORD	byMgr		:3;		// privilege, 001:User, 110:Manager, 111:SManager
+        DWORD	bEnable		:1;		// enable/disable flag
 } ALL_FLAG;
 
 typedef union {
@@ -154,5 +154,12 @@ int     DbBackupSetupRead(BYTE *pby);
 
 
 BOOL    Db_LoadAllData(BOOL bSetupReadStatus);
+
+
+//BOOL	_Db_ReadFpDataFromFlash(int fd, void* pDst, int from, int to, BYTE byEmpty, int* pIndexDBChanged, int nBaseAddr = 0);
+BOOL	_Db_FlashRead(int fd, void* pDst, int from, int to, int nSizeof, BYTE byEmpty, char *szTitle, int *pResult = NULL, int nBaseAddr = 0);
+//BOOL	_Db_FlashWrite(int fd, void* pSrc, int from, int to, int nSizeof, char *szTitle, int nBaseAddr = 0);
+//BOOL	_Db_FWWriteToFlash1(HFILE hFile, void* pSrc, int nSize);
+//BOOL	_Db_FWWriteToFlash(BYTE* pRomImage, int nFileSize);
 
 #endif // DATABASE_H

@@ -22,7 +22,7 @@ static const uint qt_meta_data_CEnrollStep1[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,6 +32,7 @@ static const uint qt_meta_data_CEnrollStep1[] = {
  // slots: signature, parameters, type, tag, flags
       22,   14,   13,   13, 0x0a,
       61,   13,   56,   13, 0x0a,
+      71,   13,   56,   13, 0x0a,
 
        0        // eod
 };
@@ -39,7 +40,7 @@ static const uint qt_meta_data_CEnrollStep1[] = {
 static const char qt_meta_stringdata_CEnrollStep1[] = {
     "CEnrollStep1\0\0from,to\0"
     "OnFocusChanged(QWidget*,QWidget*)\0"
-    "BOOL\0OnBtnESC()\0"
+    "BOOL\0OnBtnOK()\0OnBtnESC()\0"
 };
 
 void CEnrollStep1::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -49,7 +50,9 @@ void CEnrollStep1::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         CEnrollStep1 *_t = static_cast<CEnrollStep1 *>(_o);
         switch (_id) {
         case 0: _t->OnFocusChanged((*reinterpret_cast< QWidget*(*)>(_a[1])),(*reinterpret_cast< QWidget*(*)>(_a[2]))); break;
-        case 1: { BOOL _r = _t->OnBtnESC();
+        case 1: { BOOL _r = _t->OnBtnOK();
+            if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
+        case 2: { BOOL _r = _t->OnBtnESC();
             if (_a[0]) *reinterpret_cast< BOOL*>(_a[0]) = _r; }  break;
         default: ;
         }
@@ -88,9 +91,9 @@ int CEnrollStep1::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
