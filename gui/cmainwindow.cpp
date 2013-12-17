@@ -115,6 +115,7 @@ void uiProcMain(BOOL bFirst)
         //m.show();
         //m.MenuProc(UISTR_MENU_MAINMENU);
         UIPROC_WRAPPER(uiProcKeyboardManager_pc());
+        //UIPROC_WRAPPER(VerifyLoop());
 
 
 

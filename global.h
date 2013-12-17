@@ -153,12 +153,33 @@ extern HFILE    g_hKeyBoard;
 
 extern BOOL     g_uiBuildMenu;
 extern DWORD    g_uiTimeLastAction;
-extern USER_INFO g_UserInfoTemp;
+//extern USER_INFO g_UserInfoTemp;
 extern int      g_keyvalue;
 
 extern DBLICENSE                dbLicense;
 extern DBSETUP_TOTAL            dbSetupTotal;
 extern USER_INFO*		gpUserInfoEnrollData;
+
+//extern BYTE gFpData[1404];
+extern USER_INFO gUserInfoTemp;
+
+//extern DBLICENSE dbLicense;
+//extern DBSETUP_TOTAL dbSetupTotal;
+extern DBSETUP_TOTAL dbSetupTotalTemp;
+extern DBSETUP_SYSTEM dbSetupSystemNew;
+extern DBSETUP_TIMEZONE dbSetupTimezoneNew;
+extern T_PARAMETER_INFO g_params;
+//extern BYTE				gpSplash[65536];
+
+//extern USER_INFO*		gpUserInfoEnrollData;
+extern USER_TIME*		gpUserTimeData;
+//extern st_HeadString*		gpUserIdHeadData;
+
+//extern P_FPINFO			gpFingerEnrollData;
+
+extern WORD*			gpUIIndexData;
+extern BYTE*			gpIndexData;
+extern BYTE*			gpAntipassData;
 
 ////////////////////////////////////////
 #endif // GLOBAL_H

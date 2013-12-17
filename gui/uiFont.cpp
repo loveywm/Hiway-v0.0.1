@@ -34,12 +34,13 @@
 
 
 
-#define uistr_MENU_USERMANAGE   QObject::tr("USERMANAGE")
-#define uistr_MENU_ENROLLBACKUP QObject::tr("ENROLLBACKUP")
-#define uistr_USER_NEW  QObject::tr("USER_NEW")
-#define uistr_USER_NAME QObject::tr("USER_NAME")
-#define uistr_USER_ID   QObject::tr("USER_ID")
-
+#define uistr_MENU_USERMANAGE       QObject::tr("USERMANAGE")
+#define uistr_MENU_ENROLLBACKUP     QObject::tr("ENROLLBACKUP")
+#define uistr_USER_NEW              QObject::tr("USER_NEW")
+#define uistr_USER_NAME             QObject::tr("USER_NAME")
+#define uistr_USER_ID               QObject::tr("USER_ID")
+#define uistr_USER_ENROLL_PWD       QObject::tr("ENROLL_PWD")
+#define uistr_ENTER_USER_PWD       QObject::tr("ENTER_PWD")
 
 
 
@@ -85,6 +86,8 @@ void FONTDATABASE_INIT()
     __STRINGTABLE->append(uistr_USER_NEW);
     __STRINGTABLE->append(uistr_USER_NAME);
     __STRINGTABLE->append(uistr_USER_ID);
+    __STRINGTABLE->append(uistr_USER_ENROLL_PWD);
+    __STRINGTABLE->append(uistr_ENTER_USER_PWD);
 
 }
 

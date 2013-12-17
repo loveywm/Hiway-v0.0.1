@@ -25,7 +25,8 @@ SOURCES += \
     uiRtc.cpp \
     Database.cpp \
     gui/UserManage.cpp \
-    gui/cenrollstep1.cpp
+    gui/cenrollstep1.cpp \
+    gui/enrollpwd.cpp
 
 
 
@@ -41,13 +42,15 @@ HEADERS  += \
     include/rtc.h \
     Database.h \
     gui/UserManage.h \
-    gui/cenrollstep1.h
+    gui/cenrollstep1.h \
+    gui/enrollpwd.h
 
 
 FORMS    += \
     gui/cmainframe.ui \
     gui/cmainwindow.ui \
-    gui/cenrollstep1.ui
+    gui/cenrollstep1.ui \
+    gui/enrollpwd.ui
 
 RESOURCES += \
     hiway.qrc

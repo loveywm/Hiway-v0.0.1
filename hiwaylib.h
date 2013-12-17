@@ -3,6 +3,7 @@
 
 #include "global.h"
 typedef unsigned char			BOOL;
+typedef unsigned long long		UINT64, u64;
 //按键的值
 typedef enum
 {
@@ -72,7 +73,9 @@ void Rtc_Set_time(int nYear, int nMonth, int nDay, int nWeekday, \
 
 
 /////////////////////////////////////////////////////
-
+UINT64 UserId_STRtoBCD(char* strID);
+char* UserId_BCDtoSTR(UINT64 nID);
+UINT64 STRING2ID(char* strID);
 
 
 

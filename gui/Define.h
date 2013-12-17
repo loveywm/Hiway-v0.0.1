@@ -37,7 +37,7 @@ typedef unsigned long long		  UINT64;
 
 #define TITLECOLOR		QColor(255,0,10)
 #define FOREGROUND_COLOR0       QColor(255,255,255)
-#define FOREGROUND_COLOR1        QColor(255,255,0)
+#define FOREGROUND_COLOR1        QColor(0,20,0)
 
 #define BACKGROUND_IMAGE		":/images/res/bg-main2.png" //g_bgImageFilename
 //#define INPUTBOX_IMAGE			g_inputboxImageFilename

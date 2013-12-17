@@ -25,7 +25,7 @@ public:
     CEnrollStep1(QWidget *parent = NULL, UINT64 nID = 0, BOOL bNew = TRUE,BOOL bEdit = FALSE);
     ~CEnrollStep1();
     BOOL EnrollParamSet(int nCandidateDiff = 1);
-    //BOOL EnrollCheck(BOOL bIDChange = FALSE);
+    BOOL EnrollCheck(BOOL bIDChange = FALSE);
     //BOOL EnrollUserInfo();
     int DoProcess(int nEdit = 0);
 

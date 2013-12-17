@@ -9,6 +9,7 @@
 #include "ui_cmainframe.h"
 
 #include "cenrollstep1.h"
+#include "enrollpwd.h"
 
 
 
@@ -566,10 +567,16 @@ BOOL uiProcMenuCustom(QWidget* /*pWnd*/, int nItemStr)
     switch (nItemStr)
     {
         case UISTR_MENU_ENROLLNEWFP:
+            qDebug() << "UISTR_MENU_ENROLLNEWFP";
+            DIALOGBOX(CEnrollStep1);
+
+
+
+            break;
         case UISTR_MENU_ENROLLNEWPWD:
             //uiProcEnroll(&g_UserInfoTemp,nItemStr);
             qDebug() << "UISTR_MENU_ENROLLNEWPWD";
-            DIALOGBOX(CEnrollStep1);
+            DIALOGBOX(EnrollPWD);
 
 
 

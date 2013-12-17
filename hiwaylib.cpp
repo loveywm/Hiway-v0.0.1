@@ -354,3 +354,71 @@ int HIWAY_INIT0(void)
 _lExit:
         return nRet;
 }
+
+/////////////////////////////////////////////////////
+UINT64 UserId_STRtoBCD(char* strID)
+{
+        int nLength, i;
+        UINT64 nID = 0;
+        BYTE number;
+
+        if ((nLength = strlen(strID)) > IDNUMBER_LENGTH)
+                return 0;
+
+        for (i=0; i<nLength; i++)
+        {
+                nID *= 10;
+
+                if (strID[i] >= '0' && strID[i] <= '9')
+                        number = strID[i] - '0';
+                else
+                        number = 0;
+                nID += number;
+        }
+
+        return nID;
+
+}
+char* UserId_BCDtoSTR(UINT64 nID)
+{
+
+
+        static char szID[IDNUMBER_LENGTH];
+        int i;
+        BYTE number;
+
+        memset(szID, 0, sizeof(szID));
+
+        for (i=IDNUMBER_LENGTH-1; i>=0; i--)
+        {
+                number = (BYTE)(nID % 10);
+                szID[i] = '0' + number;
+                nID /= 10;
+        }
+
+        return szID;
+
+}
+UINT64 STRING2ID(char* strID)
+{
+        int nLength, i;
+        UINT64 nID = 0;
+        BYTE number;
+
+        if ((nLength = strlen(strID)) > IDNUMBER_LENGTH)
+                return 0;
+
+        for (i=0; i<nLength; i++)
+        {
+                nID *= 10;
+
+                if (strID[i] >= '0' && strID[i] <= '9')
+                        number = strID[i] - '0';
+                else
+                        number = 0;
+                nID += number;
+        }
+
+        return nID;
+}
+
