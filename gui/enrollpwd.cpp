@@ -4,6 +4,7 @@
 #include "Define.h"
 #include "../hiwaylib.h"
 #include <QDebug>
+#include "../uiLcd.h"
 
 #define PWDNUMBER_LENGTH   8
 #define IDNUMBER_LENGTH    8
@@ -202,7 +203,7 @@ BOOL EnrollPWD::EnrollCheck(BOOL bIDChange)
     {
         qDebug() << "DbUserInfo Is UsedID" ;
 
-        uiLcdMessageBox(UI_MSG_ERROR,UISTR_ENROLL_USED_ID,UI_MSGTIMEOUT);
+        uiLcdMessageBox(UI_MSG_ERROR,"ENROLL_NO_USED_ID",UI_MSGTIMEOUT);
 
         return FALSE;
     }
@@ -253,8 +254,8 @@ void EnrollPWD::OnIDChange(const QString &szID)
             ui->txtID->setText(UserId_BCDtoSTR(99999999));
             ui->txtID->selectAll();
     }
-    EnrollCheck(TRUE);
-    EnrollParamSet(-1);
+    //EnrollCheck(TRUE);
+    //eEnrollParamSet(-1);
 }
 
 void EnrollPWD::OnPasswordChange(const QString &szPassword)

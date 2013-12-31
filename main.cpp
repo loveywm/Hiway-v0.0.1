@@ -64,15 +64,15 @@ BOOL HIWAY_LOAD(void)
     }
 
     //读取totle setup 系统运行使用的数据
-    BOOL bRet = DbSetupTotalRead();
+    //BOOL bRet = DbSetupTotalRead();
 
 
     //加载用户数据，考勤数据等
-    if (!Db_LoadAllData(bRet))
-    {
-        qDebug() << "HIWAY_LOAD::Db_LoadAllData(bRet) error!";
-        return FALSE;
-    }
+    //if (!Db_LoadAllData(bRet))
+    //{
+        //qDebug() << "HIWAY_LOAD::Db_LoadAllData(bRet) error!";
+        //return FALSE;
+    //}
 
 
 

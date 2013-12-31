@@ -11,6 +11,7 @@
 #include "Define.h"
 #include "menu.h"
 
+#include "messagebox.h"
 
 /////////////////////////////////////////////////
 void uiProcMain(BOOL bFirst);
@@ -106,6 +107,13 @@ void uiProcMain(BOOL bFirst)
     g_MainWindow->show();
     QApplication::processEvents();
     //sleep(2);
+
+    //CMessageBox box(NULL);
+    //box.SetText("xxx");
+    //box.show();
+
+    QApplication::processEvents();
+
     while(1)
     {
         //uiProcKeyboardManager();

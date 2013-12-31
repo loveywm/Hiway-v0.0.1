@@ -794,7 +794,7 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
         x = m_nFrameX + w_spacer;
         y = MENU_ICON_TOPMARGIN + m_nFrameY - h - h_spacer;
         //y = m_nFrameY + h_spacer;
-/*
+
         qDebug() << "w==" << w;
         qDebug() << "h==" << h;
         qDebug() << "h_spacer==" << h_spacer;
@@ -804,11 +804,15 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
         qDebug() << "painter->window().width()==" << painter->window().width();
         qDebug() << "w * MENUITEM_COLS==" << w * MENUITEM_COLS;
         qDebug() << "MENUITEM_COLS==" << MENUITEM_COLS;
-*/
+
+        qDebug() << "from==" << from;
+        qDebug() << "to==" << to;
+
+        qDebug() << "#####################################################";
 
         for (i=from; i<=to; i++)
         {
-            if ((i - from) % MENUITEM_COLS == 0)
+            if ((i - from) % MENUITEM_COLS == 0)//超过行数后，重新从第二行绘画
             {
                 //qDebug() << "(i - from) % MENUITEM_COLS==" << (i - from) % MENUITEM_COLS;
                 x = m_nFrameX + w_spacer;
@@ -823,21 +827,21 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
             //qDebug() << "szIconFile==" << g_uiMenuItems[i].szIconFile;
             //qDebug() << "nType==" << g_uiMenuItems[i].nType;
 
-            if (nCurrentIndex == i)
+            if (nCurrentIndex == i)//突出显示目标定位
             {
                 QPixmap pmap_sel(QString(RESOURCE_PATH) + QString(SELECTED_ITEM_FILENAME));
                 QPainterPath roundPath = CustomStyle::roundRectPath(QRect(x, y, w, h));
                 painter->setClipPath(roundPath);
                 painter->drawPixmap(x, y, w, h, pmap_sel, 0, 0, pmap_sel.width(), pmap_sel.height());
                 painter->setClipPath(roundPath, Qt::NoClip);
-                //qDebug() << "love1";
+                qDebug() << "love1";
             }
             else
             {
                 painter->setPen(QPen(QColor(74,74,74),1,Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin));
                 painter->setBrush(QColor(20,20,20));
                 painter->drawRoundRect(x, y, w, h, 20, 15);
-                //qDebug() << "love2";
+                qDebug() << "love2";
             }
 
             QIcon ico(QString(RESOURCE_PATH) + QString(item->szIconFile));
@@ -852,9 +856,9 @@ void CMenu::drawIconStyle(QPainter *painter, int nCurrentIndex, int from, int to
                 str.append("...");
             }
 
-            x = x + w + w_spacer;
+            x = x + w + w_spacer;//下一个x坐标的位置点
         }
-
+        qDebug() << "#####################################################";
         painter->restore();
         //while(1){sleep(5);}
 }
@@ -951,39 +955,7 @@ void CMenu::OnKeyPressOk(int nTitle)
     qDebug() << "OnKeyPressOk::nCurrentTitle=="<<nCurrentTitle;
     qDebug() << "OnKeyPressOk::nCurrentIndex=="<<nCurrentIndex;
     qDebug() << "OnKeyPressOk::nTopIndex=="<<nTopIndex;
-/*
-    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_USBMANAGE) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_SYSTEMSETTING))
-    {
-            if (g_uiProcStatus.byMgr != PRIV_SMGR && Db_GetManagerCount(PRIV_SMGR))
-            {
-                    uiLcdMessageBox(UI_MSG_ERROR, UISTR_VERIFY_ILLEGAL, UI_MSGTIMEOUT);
-                    return;
-            }
-    }
 
-    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_BAUDRATE))
-    {
-            if (!dbSetupSystemNew.bRS232Use && !dbSetupSystemNew.bRS485Use)
-                    return;
-    }
-
-    if ((g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_IPADDRESS) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_MASKADDRESS) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_GWADDRESS) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_COMMPWD) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_DHCPUSE) ||
-    (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_PORTBACKGROUND) ||
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_COMMSETTING_PCBACKGROUND))
-    {
-            if (!dbSetupSystemNew.bEthernetUse)
-                    return;
-    }
-
-    if ((dbSetupSystemNew.nLockGroupMain) &&
-            (g_uiMenuItems[nCurrentIndex].nMenuStr == UISTR_MENU_ACSETTING_LOCKGROUP_SET))
-            return;
-*/
     switch (g_uiMenuItems[nCurrentIndex].nType)
     {
     case UIMENU_POPUP:

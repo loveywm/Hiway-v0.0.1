@@ -34,17 +34,20 @@ typedef unsigned long long		  UINT64;
 
 #define LCD_SIZE_X	320
 #define LCD_SIZE_Y	240
+#define UI_MSGTIMEOUT   2000
 
 #define TITLECOLOR		QColor(255,0,10)
 #define FOREGROUND_COLOR0       QColor(255,255,255)
 #define FOREGROUND_COLOR1        QColor(0,20,0)
 
+#define GUI_RESOURCE_PATH		":/images/res/"
 #define BACKGROUND_IMAGE		":/images/res/bg-main2.png" //g_bgImageFilename
 //#define INPUTBOX_IMAGE			g_inputboxImageFilename
 #define TITLE_IMAGE			":/images/res/title-2.png" //g_titleImageFilename
 
 #define GUI_DLG_IMPL(_MAX_)		{if (_MAX_) setGeometry(0, 0, LCD_SIZE_X, LCD_SIZE_Y);}
 #define ITEM_CNT(_x_)			(sizeof((_x_)) / sizeof((_x_)[0]))
+
 #define GUI_DLG_SET_FORE_COLOR(_pal_, _col_) {(_pal_)->setColor(QPalette::All, QPalette::WindowText, (_col_)); \
                                                 (_pal_)->setColor(QPalette::All, QPalette::Text, (_col_)); \
                                             }

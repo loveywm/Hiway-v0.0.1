@@ -26,7 +26,9 @@ SOURCES += \
     Database.cpp \
     gui/UserManage.cpp \
     gui/cenrollstep1.cpp \
-    gui/enrollpwd.cpp
+    gui/enrollpwd.cpp \
+    gui/messagebox.cpp \
+    uiLcd.cpp
 
 
 
@@ -43,14 +45,17 @@ HEADERS  += \
     Database.h \
     gui/UserManage.h \
     gui/cenrollstep1.h \
-    gui/enrollpwd.h
+    gui/enrollpwd.h \
+    gui/messagebox.h \
+    uiLcd.h
 
 
 FORMS    += \
     gui/cmainframe.ui \
     gui/cmainwindow.ui \
     gui/cenrollstep1.ui \
-    gui/enrollpwd.ui
+    gui/enrollpwd.ui \
+    gui/messagebox.ui
 
 RESOURCES += \
     hiway.qrc

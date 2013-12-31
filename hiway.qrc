@@ -26,5 +26,14 @@
         <file>res/ALLUSERINFODOWN.png</file>
         <file>res/ALLMANAGERGLOGLODA.png</file>
         <file>res/ALLGLOGLOAD.png</file>
+        <file>res/bg-inputbox1.png</file>
+        <file>res/bg-inputbox.png</file>
+        <file>res/icon-question.png</file>
+        <file>res/icon-ok.png</file>
+        <file>res/icon-notify.png</file>
+        <file>res/icon-normal.png</file>
+        <file>res/icon-help.png</file>
+        <file>res/icon-checked.png</file>
+        <file>res/icon-abort.png</file>
     </qresource>
 </RCC>
